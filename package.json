@@ -1,0 +1,39 @@
+{
+  "name": "a11y-dashboard",
+  "version": "1.0.0",
+  "description": "The a11y dashboard",
+  "main": "index.js",
+  "scripts": {
+    "dev": "WEBSERVICE_URL=http://`docker-machine ip default`:8080 NODE_ENV=development nodemon --ignore src . | bunyan",
+    "start": "node .",
+    "test": "",
+    "dist": "rimraf dist && NODE_ENV=production webpack --config ./webpack.config.production.js --progress --profile --colors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/atlassian/a11y-dashboard.git"
+  },
+  "keywords": [
+    "a11y",
+    "dashboard"
+  ],
+  "author": "Joscha Feth <jfeth@atlassian.com>",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/atlassian/a11y-dashboard#readme",
+  "dependencies": {
+    "bunyan": "^1.5.1",
+    "compression": "^1.6.0",
+    "express": "^4.13.3",
+    "object-assign": "^4.0.1"
+  },
+  "devDependencies": {
+    "babel-loader": "^6.1.0",
+    "html-webpack-plugin": "^1.6.2",
+    "moment": "^2.10.6",
+    "nodemon": "^1.8.1",
+    "webpack": "^1.12.4",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.5.0",
+    "xhr": "^2.2.0"
+  }
+}
