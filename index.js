@@ -2,8 +2,12 @@ const bunyan = require('bunyan');
 const path = require('path');
 const express = require('express');
 
+const BUNYAN_LEVEL = process.env.BUNYAN_LEVEL || bunyan.INFO;
+const BUNYAN_FORMAT = process.env.BUNYAN_FORMAT || undefined;
 const logger = bunyan.createLogger({
-  name: 'a11y-dashboard'
+  name: 'a11y-dashboard',
+  level: BUNYAN_LEVEL,
+  format: BUNYAN_FORMAT,
 });
 
 const port = process.env.PORT || 5000;
