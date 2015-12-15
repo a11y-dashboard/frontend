@@ -24,6 +24,7 @@
   "dependencies": {
     "bunyan": "^1.5.1",
     "compression": "^1.6.0",
+    "debug": "^2.2.0",
     "express": "^4.13.3",
     "object-assign": "^4.0.1"
   },

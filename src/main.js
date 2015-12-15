@@ -1,5 +1,11 @@
 const moment = require('moment/moment');
 const xhr = require('xhr');
+const debug = require('debug');
+
+const logger = {
+  debug: debug('a11y-dashboard:debug'),
+  error: debug('a11y-dashboard:error'),
+};
 
 google.load('visualization', '1.1', {packages: ['corechart'], 'language': 'en-AU'});
 google.setOnLoadCallback(init);
