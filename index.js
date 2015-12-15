@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'development') {
   const distFolder = path.join(__dirname, 'dist');
 
   app.use(express.static(distFolder));
-  app.get('/', function response(req, res) {
+  app.get('/', (req, res) => {
     res.sendFile(path.join(distFolder, 'index.html'));
   });
 } else {
