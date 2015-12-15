@@ -29,13 +29,14 @@
     "object-assign": "^4.0.1"
   },
   "devDependencies": {
-    "babel-loader": "^6.1.0",
-    "html-webpack-plugin": "^1.6.2",
+    "babel-core": "^6.3.17",
+    "babel-loader": "^6.2.0",
+    "html-webpack-plugin": "^1.7.0",
     "moment": "^2.10.6",
     "nodemon": "^1.8.1",
-    "webpack": "^1.12.4",
-    "webpack-dev-middleware": "^1.2.0",
-    "webpack-hot-middleware": "^2.5.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-middleware": "^1.4.0",
+    "webpack-hot-middleware": "^2.6.0",
     "xhr": "^2.2.0"
   }
 }
