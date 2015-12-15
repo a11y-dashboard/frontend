@@ -7,7 +7,8 @@
     "dev": "WEBSERVICE_URL=http://`docker-machine ip default`:8080 NODE_ENV=development nodemon --ignore src . | bunyan",
     "start": "node .",
     "test": "",
-    "dist": "rimraf dist && NODE_ENV=production webpack --config ./webpack.config.production.js --progress --profile --colors"
+    "postinstall": "rimraf dist && webpack --config ./webpack.config.production.js --progress --profile --colors",
+    "docker:local": "npm run dist && npm start | bunyan"
   },
   "repository": {
     "type": "git",
