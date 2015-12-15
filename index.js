@@ -4,6 +4,8 @@ const express = require('express');
 
 const BUNYAN_LEVEL = process.env.BUNYAN_LEVEL || bunyan.INFO;
 const BUNYAN_FORMAT = process.env.BUNYAN_FORMAT || undefined;
+const WEBSERVICE_URL = process.env.WEBSERVICE_URL || null;
+
 const logger = bunyan.createLogger({
   name: 'a11y-dashboard',
   level: BUNYAN_LEVEL,
@@ -12,6 +14,12 @@ const logger = bunyan.createLogger({
 
 const port = process.env.PORT || 5000;
 const app = express();
+
+app.get('/service.json', (req, res) => {
+    res.json({
+        webservice: WEBSERVICE_URL,
+    });
+});
 
 if (process.env.NODE_ENV !== 'development') {
   const compression = require('compression');

@@ -19,9 +19,6 @@ const config = {
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-au/),
-    new webpack.DefinePlugin({
-        WEBSERVICE_URL: JSON.stringify(process.env.WEBSERVICE_URL),
-    })
   ],
   module: {
     loaders: [{

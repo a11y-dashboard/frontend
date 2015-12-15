@@ -1,5 +1,6 @@
 const moment = require('moment/moment');
 const xhr = require('xhr');
+const Promise = require('es6-promise').Promise;
 const debug = require('debug');
 
 const logger = {
@@ -10,12 +11,33 @@ const logger = {
 google.load('visualization', '1.1', {packages: ['corechart'], 'language': 'en-AU'});
 google.setOnLoadCallback(init);
 
+function getServiceDescriptor() {
+    return new Promise((resolve, reject) => {
+      xhr.get({
+          uri: "/service.json"
+      }, function (err, resp, body) {
+        if (err) {
+          logger.error(err);
+          reject(err);
+          return;
+        }
+        resolve(JSON.parse(body));
+      });
+    });
+}
+
 function init() {
-  xhr.get({
-      uri: WEBSERVICE_URL + "/overview"
-  }, function (err, resp, body) {
-    drawCharts(JSON.parse(body));
-  });
+  getServiceDescriptor()
+    .then((descriptor) => {
+      xhr.get({
+          uri: descriptor.webservice + "/overview"
+      }, function (err, resp, body) {
+        drawCharts(JSON.parse(body));
+      });
+    })
+    .catch((err) => {
+      logger.error(err);
+    });
 }
 
 
