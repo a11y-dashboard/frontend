@@ -5,6 +5,7 @@ const express = require('express');
 const BUNYAN_LEVEL = process.env.BUNYAN_LEVEL || bunyan.INFO;
 const BUNYAN_FORMAT = process.env.BUNYAN_FORMAT || undefined;
 const WEBSERVICE_URL = process.env.WEBSERVICE_URL || null;
+const HOST = '0.0.0.0';
 
 const logger = bunyan.createLogger({
   name: 'a11y-dashboard',
@@ -16,10 +17,12 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 app.get('/service.json', (req, res) => {
-    res.json({
-        webservice: WEBSERVICE_URL,
-    });
+  res.json({
+    webservice: WEBSERVICE_URL,
+  });
 });
+
+app.get('/healthcheck', (_, res) => res.send('♥'));
 
 if (process.env.NODE_ENV !== 'development') {
   const compression = require('compression');
@@ -43,16 +46,16 @@ if (process.env.NODE_ENV !== 'development') {
     publicPath: webpackConfig.output.publicPath,
     contentBase: 'src',
     stats: {
-      colors: true
-    }
+      colors: true,
+    },
   }));
 
   app.use(webpackHotMiddleware(wp));
 }
 
-app.listen(port, '0.0.0.0', (err) => {
+app.listen(port, HOST, (err) => {
   if (err) {
     return logger.error(err);
   }
-  logger.info('Listening on 0.0.0.0:%s.', port);
+  logger.info(`Listening on ${HOST}:${port}.`);
 });
