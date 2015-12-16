@@ -9,7 +9,7 @@
     "dev": "WEBSERVICE_URL=http://`docker-machine ip default`:8080 NODE_ENV=development nodemon --ignore src . | bunyan",
     "docker:local": "npm run build && npm start | bunyan",
     "lint": "eslint .",
-    "postinstall": "npm run build -- --progress --profile --colors",
+    "postinstall": "npm run build -- --colors",
     "start": "node .",
     "test": ". ./test/.env.local && mocha"
   },
