@@ -20,7 +20,7 @@ plan(key:'ADT',name:'Accessibility Dashboard Tests',
             repository(name:'Accessibility Dashboard')
 
          }
-         task(type:'script',description:'Free port 8080',
+         task(type:'script',description:'Free port 5000',
             scriptBody:'''
 
 
@@ -36,7 +36,7 @@ exit 0
 
 
 ''',
-            environmentVariables:'PORT="8080"')
+            environmentVariables:'PORT="5000"')
 
          task(type:'npm',description:'Install dependencies',
             command:'install',executable:'Node.js 4.2')
@@ -69,7 +69,7 @@ function kill_a11yws {
 trap kill_a11yws INT EXIT
 
 npm install wait-on
-`npm bin`/wait-on -t 300000 tcp:8080
+`npm bin`/wait-on -t 300000 tcp:5000
 
 
 ''')
