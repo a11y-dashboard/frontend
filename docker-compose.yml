@@ -8,3 +8,4 @@ dashboard:
   command: "npm run docker:local"
   environment:
     PORT: 5000
+    WEBSERVICE_URL: "$WEBSERVICE_URL"

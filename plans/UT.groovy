@@ -61,11 +61,9 @@ chmod u+x docker-compose
 
          task(type:'script',description:'Run composed docker service in background',
             scriptBody:'''
-
-
 set -e
 
-screen -S a11yd -d -m bash -c "./docker-compose stop && ./docker-compose rm -f && ./docker-compose up 2>&1|tee command.log"
+screen -S a11yd -d -m bash -c "WEBSERVICE_URL=\"http://localhost:8080\" ./docker-compose stop && ./docker-compose rm -f && ./docker-compose up 2>&1|tee command.log"
 function kill_a11yd {
     screen -X -S a11yd quit
 }
