@@ -1,4 +1,4 @@
-FROM node:onbuild
+FROM joscha/node-onbuild-npmrc:latest
 
 ENV PORT 8080
 ENV NODE_ENV production
