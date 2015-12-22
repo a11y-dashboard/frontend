@@ -6,8 +6,11 @@
   "scripts": {
     "bamboo": ". ./test/.env.bamboo && mocha --reporter mocha-junit-reporter",
     "build": "rimraf dist && webpack --config ./webpack.config.production.js",
-    "dev": "WEBSERVICE_URL=http://`docker-machine ip default`:8080 NODE_ENV=development nodemon --ignore src . | bunyan",
-    "docker:local": "npm run build && npm start | bunyan",
+    "local": "node . | bunyan",
+    "dev:local": "nodemon --ignore src --exec \"npm run local\"",
+    "dev:local:docker": "npm run dev:local -- -L",
+    "dev:docker:boot": ". ./test/.env.local && docker-compose up",
+    "dev:local:ddev": ". ./test/.env.ddev && npm run dev:local",
     "lint": "eslint .",
     "postinstall": "npm run build -- --colors",
     "start": "node .",
