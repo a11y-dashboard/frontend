@@ -68,6 +68,10 @@ function drawChart(datapoints, title, target) {
     hAxis: {
       format: 'd.M.yy',
     },
+    vAxis: {
+      minValue: 0,
+      format: '#',
+    },
   };
 
   const chart = new google.visualization.LineChart(target);
