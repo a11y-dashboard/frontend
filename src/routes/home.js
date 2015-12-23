@@ -3,8 +3,9 @@ const logger = require('../logger');
 const Finch = require('finchjs');
 const projects = require('../projects.json');
 const adgColors = require('../adgColors.json');
-const xhr = require('xhr');
+const promisedXhr = require('../promisedXhr');
 const getServiceDescriptor = require('../getServiceDescriptor');
+const Promise = require('es6-promise').Promise;
 
 const columnTypes = {
   2: 'error',
@@ -122,29 +123,38 @@ function drawPerProductCharts(p) {
 }
 
 function drawCharts(p) {
+  logger.debug('about to draw charts');
   drawPerProductCharts(p);
-  AJS.$('.spinner').spinStop();
 }
 
 function init() {
   AJS.$('.spinner').spin();
-  getServiceDescriptor()
+  return getServiceDescriptor()
     .then((descriptor) => {
-      xhr.get({
+      return promisedXhr('get', {
         uri: `${descriptor.webservice}/overview`,
-      }, (err, resp, body) => {
-        drawCharts(JSON.parse(body));
+      })
+      .then((obj) => {
+        return drawCharts(obj.body);
       });
     })
+    .then(() => AJS.$('.spinner').spinStop())
     .catch((err) => {
       logger.error(err);
     });
 }
 
+function googleLoaded() {
+  return googleLoaded.promise || (googleLoaded.promise = new Promise((resolve) => {
+    google.load('visualization', '1.1', {
+      packages: ['corechart'],
+      language: 'en-AU',
+    });
+    logger.debug('Waiting for google onLoad');
+    google.setOnLoadCallback(resolve);
+  }));
+}
+
 module.exports = () => {
-  google.load('visualization', '1.1', {
-    packages: ['corechart'],
-    language: 'en-AU',
-  });
-  google.setOnLoadCallback(init);
+  return googleLoaded().then(() => init());
 };

@@ -5,14 +5,28 @@ const routes = {
   details: require('./routes/details'),
 };
 
-Finch.route('details/:project/:date/:level', (obj) => {
-  logger.debug('Detail route', obj);
-  routes.details(obj);
+function makeVisible(view) {
+  return () => {
+    Array.prototype.slice.call(document.querySelectorAll('#main > div')).forEach((div) => {
+      const display = (div.id === view) ? 'block' : 'none';
+      logger.debug(`Setting display of #${div.id} to ${display}`);
+      div.style.display = display;
+    });
+  };
+}
+
+Finch.route('details/:project/:date/:level', (bindings, cb) => {
+  logger.debug('Detail route', bindings);
+  routes.details(bindings)
+  .then(makeVisible('details'))
+  .then(cb);
 });
 
-Finch.route('', () => {
+Finch.route('', (bindings, cb) => {
   logger.debug('Home route');
-  routes.home();
+  routes.home()
+  .then(makeVisible('home'))
+  .then(cb);
 });
 
 Finch.listen();
