@@ -140,9 +140,11 @@ function drawPerProductCharts(p) {
 
 function drawCharts(p) {
   drawPerProductCharts(p);
+  AJS.$('.spinner').spinStop();
 }
 
 function init() {
+  AJS.$('.spinner').spin();
   getServiceDescriptor()
     .then((descriptor) => {
       xhr.get({

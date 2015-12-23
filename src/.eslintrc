@@ -1,6 +1,7 @@
 {
   "extends": "../.eslintrc",
   "globals": {
-    "google": false
+    "google": false,
+    "AJS": false
   }
 }
