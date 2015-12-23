@@ -20,12 +20,28 @@ const config = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-au/),
   ],
+  resolve: {
+    alias: {
+      'finchjs': path.join('finchjs', 'finch.js'),
+      'moment': path.join('moment', 'moment'),
+    },
+  },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      loader: 'babel',
-    }],
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel',
+      },
+      {
+        test: /\.json$/,
+        loader: 'json',
+      },
+      {
+        test: /finchjs/,
+        loader: 'exports?this.Finch',
+      },
+    ],
   },
 };
 
