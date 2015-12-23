@@ -24,8 +24,9 @@ Finch.route('details/:project/:date/:level', (bindings, cb) => {
 
 Finch.route('', (bindings, cb) => {
   logger.debug('Home route');
-  routes.home()
-  .then(makeVisible('home'))
+  // We have to make the content visible before, otherwise the text on the charts is jumbled
+  Promise.resolve(makeVisible('home')())
+  .then(() => routes.home())
   .then(cb);
 });
 
