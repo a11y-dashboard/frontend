@@ -89,6 +89,14 @@ function drawChart(datapoints, title, target) {
         labelInLegend: 'Error trend',
         visibleInLegend: false,
       },
+      2: {
+        type: 'linear',
+        color: adgColors.yellow,
+        opacity: 0.2,
+        pointsVisible: false,
+        labelInLegend: 'Warning trend',
+        visibleInLegend: false,
+      },
     },
   };
 
