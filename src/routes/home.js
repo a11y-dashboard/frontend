@@ -3,8 +3,7 @@ const logger = require('../logger');
 const Finch = require('finchjs');
 const projects = require('../projects.json');
 const adgColors = require('../adgColors.json');
-const promisedXhr = require('../promisedXhr');
-const getServiceDescriptor = require('../getServiceDescriptor');
+const webserviceRequest = require('../webserviceRequest');
 const Promise = require('es6-promise').Promise;
 const levels = require('../levels.json');
 
@@ -135,14 +134,9 @@ function drawCharts(p) {
 
 function init() {
   AJS.$('.spinner').spin();
-  return getServiceDescriptor()
-    .then((descriptor) => {
-      return promisedXhr('get', {
-        uri: `${descriptor.webservice}/overview`,
-      })
-      .then((obj) => {
-        return drawCharts(obj.body);
-      });
+  return webserviceRequest('overview')
+    .then((obj) => {
+      return drawCharts(obj.body);
     })
     .then(() => AJS.$('.spinner').spinStop())
     .catch((err) => {
