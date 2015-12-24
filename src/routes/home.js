@@ -6,6 +6,7 @@ const adgColors = require('../adgColors.json');
 const promisedXhr = require('../promisedXhr');
 const getServiceDescriptor = require('../getServiceDescriptor');
 const Promise = require('es6-promise').Promise;
+const levels = require('../levels.json');
 
 const columnTypes = {
   2: 'error',
@@ -110,13 +111,15 @@ function drawPerProductCharts(p) {
     logger.debug('Calculate averages');
     const datapoints = validTimestamps.map((timestamp) => {
       const datapoint = originalDatapoints[timestamp];
-      return {
-        error: Math.round((datapoint.error || 0) / datapoint.urls) || null,
-        warning: Math.round((datapoint.warning || 0) / datapoint.urls) || null,
-        notice: Math.round((datapoint.notice || 0) / datapoint.urls) || null,
+      const ret = {
         urls: datapoint.urls || null,
         date: new Date(parseInt(timestamp, 10)),
       };
+      levels.forEach((type) => {
+        ret[type] = Math.round((datapoint[type] || 0) / datapoint.urls) || null;
+      });
+
+      return ret;
     });
 
     const target = document.createElement('div');
