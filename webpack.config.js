@@ -38,6 +38,10 @@ const config = {
         loader: 'json',
       },
       {
+        test: /\.html$/,
+        loader: 'html',
+      },
+      {
         test: /finchjs/,
         loader: 'exports?this.Finch',
       },
