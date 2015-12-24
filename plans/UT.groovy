@@ -63,7 +63,7 @@ chmod u+x docker-compose
             scriptBody:'''
 set -e
 
-screen -S a11yd -d -m bash -c "./docker-compose stop && ./docker-compose rm -f && WEBSERVICE_URL=\"http://localhost:8080\" ./docker-compose up 2>&1|tee command.log"
+screen -S a11yd -d -m bash -c "./docker-compose stop && ./docker-compose rm -f && NODE_ENV=production WEBSERVICE_URL=\"http://localhost:8080\" ./docker-compose up 2>&1|tee command.log"
 function kill_a11yd {
     screen -X -S a11yd quit
 }

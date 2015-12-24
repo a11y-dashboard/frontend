@@ -8,7 +8,7 @@ dashboard:
   command: "npm run dev:local:docker"
   environment:
     PORT: 5000
-    NODE_ENV: development
+    NODE_ENV: "$NODE_ENV"
     WEBSERVICE_URL: "$WEBSERVICE_URL"
     BUNYAN_LEVEL: "debug"
     BUNYAN_FORMAT: "short"
