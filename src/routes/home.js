@@ -81,6 +81,9 @@ function drawChart(datapoints, origin, target) {
   google.visualization.events.addListener(chart, 'select', () => {
     const selection = chart.getSelection();
     const item = selection[0];
+    if (!item) {
+      return;
+    }
     const date = data.getValue(item.row, 0);
     const type = columnTypes[item.column];
     if (type) {
