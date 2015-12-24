@@ -29,11 +29,13 @@
             <td class="action" headers="action">
                 <ul class="menu">
                     <li>
-                        <a href="{{original_url}}">Go to original URL</a>
+                        <a href="{{original_url}}" title="Go to original URL">Source</a>
                     </li>
+                    {{#help_url}}
                     <li>
                         <a href="{{help_url}}">Help</a>
                     </li>
+                    {{/help_url}}
                 </ul>
             </td>
         </tr>
