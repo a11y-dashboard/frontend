@@ -1,0 +1,13 @@
+{{#each data}}
+    <h3><a href="{{@key}}" target="_blank"><span class="aui-icon aui-icon-small aui-iconfont-link">Go to original URL</span> {{@key}}</a></h3>
+    <ol class="errors-per-url">
+    {{#each this}}
+        {{#each this}}
+            <li class="selectors-per-message">
+                <h4>{{@key}} <small>({{@../key}})</small></h4>
+                {{> table rows=this}}
+            </li>
+        {{/each}}
+    {{/each}}
+</ol>
+{{/each}}

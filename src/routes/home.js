@@ -7,6 +7,8 @@ const webserviceRequest = require('../webserviceRequest');
 const Promise = require('es6-promise').Promise;
 const levels = require('../levels.json');
 
+const template = require('./home/index.handlebars');
+
 const columnTypes = {
   2: 'error',
   3: 'warning',
@@ -132,13 +134,12 @@ function drawCharts(p) {
   drawPerProductCharts(p);
 }
 
-function init() {
-  AJS.$('.spinner').spin();
+function init(targetNode) {
   return webserviceRequest('overview')
     .then((obj) => {
-      return drawCharts(obj.body);
+      targetNode.innerHTML = template();
+      drawCharts(obj.body);
     })
-    .then(() => AJS.$('.spinner').spinStop())
     .catch((err) => {
       logger.error(err);
     });
@@ -155,6 +156,6 @@ function googleLoaded() {
   }));
 }
 
-module.exports = () => {
-  return googleLoaded().then(() => init());
+module.exports = (options, targetNode) => {
+  return googleLoaded().then(() => init(targetNode));
 };

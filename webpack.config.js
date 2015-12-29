@@ -38,8 +38,16 @@ const config = {
         loader: 'json',
       },
       {
-        test: /\.html$/,
-        loader: 'html',
+        test: /\.handlebars$/,
+        loader: 'handlebars-loader',
+      },
+      {
+        test: /\.less$/,
+        loader: 'style!css!less',
+      },
+      {
+        test: /\.css$/,
+        loader: 'style!css',
       },
       {
         test: /finchjs/,
