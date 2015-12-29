@@ -1,13 +1,24 @@
+<ol>
 {{#each data}}
-    <h3><a href="{{@key}}" target="_blank"><span class="aui-icon aui-icon-small aui-iconfont-link">Go to original URL</span> {{@key}}</a></h3>
-    <ol class="errors-per-url">
-    {{#each this}}
+<li>
+    <h3><a href="{{@key}}" target="_blank">{{@key}}</a></h3>
+    <ol class="errors-per-url" type="a">
         {{#each this}}
-            <li class="selectors-per-message">
-                <h4>{{@key}} <small>({{@../key}})</small></h4>
-                {{> table rows=this}}
-            </li>
+            {{#each this}}
+                <li class="selectors-per-message">
+                    <h4>{{@key}}
+                        <span class="aui-lozenge" title="{{this.code}}">{{this.origin}}</span>
+                        {{#each this.standards}}
+                            {{#if this}}
+                            <span class="aui-lozenge aui-lozenge-complete">{{this}}</span>
+                            {{/if}}
+                        {{/each}}
+                    </h4>
+                    {{> table rows=this.rows}}
+                </li>
+            {{/each}}
         {{/each}}
-    {{/each}}
-</ol>
+    </ol>
+</li>
 {{/each}}
+</ol>

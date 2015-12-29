@@ -3,6 +3,8 @@ const webserviceRequest = require('../webserviceRequest');
 const queryString = require('query-string');
 const _ = require('lodash');
 const hljs = require('highlight.js');
+const moment = require('moment');
+const projects = require('../projects.json');
 
 require('highlight.js/styles/default.css');
 
@@ -28,12 +30,30 @@ module.exports = (options, targetNode) => {
       data[row.original_url] = data[row.original_url] || {};
       const errorKey = `${row.origin_library}.${row.code}`;
       data[row.original_url][errorKey] = data[row.original_url][errorKey] || {};
-      data[row.original_url][errorKey][row.message] = data[row.original_url][errorKey][row.message] || [];
-      data[row.original_url][errorKey][row.message].push(row);
-      data[row.original_url][errorKey][row.message] = _.uniq(data[row.original_url][errorKey][row.message], 'selector');
+      data[row.original_url][errorKey][row.message] = data[row.original_url][errorKey][row.message] || {
+        rows: [],
+        standards: [],
+        origin: row.origin_library,
+        code: row.code,
+      };
+      const standards = data[row.original_url][errorKey][row.message].standards;
+      if (standards.indexOf(row.standard) === -1) {
+        standards.push(row.standard);
+        standards.sort();
+      }
+      data[row.original_url][errorKey][row.message].rows.push(row);
+      data[row.original_url][errorKey][row.message].rows = _.uniq(data[row.original_url][errorKey][row.message].rows, 'selector');
     });
+    const date = moment(+options.date);
 
-    targetNode.innerHTML = template({ data });
+    targetNode.innerHTML = template({
+      data,
+      urlNumber: Object.keys(data).length,
+      project: projects[options.project],
+      type: options.level,
+      absoluteTime: date.format(),
+      relativeTime: date.fromNow(),
+    });
     hljs.initHighlighting();
   });
 };
