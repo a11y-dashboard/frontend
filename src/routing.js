@@ -6,14 +6,15 @@ const routes = {
 };
 
 function stopSpinning() {
-  AJS.$('.spinner').spinStop();
+  logger.debug('stopping spinner');
+  AJS.$('#routeSpinner').spinStop();
 }
 
 function setupRoute(name, bindings, cb) {
   const targetNode = document.getElementById('main');
   logger.debug(`${name} route`, bindings, targetNode);
 
-  AJS.$('.spinner').spin();
+  AJS.$('#routeSpinner').spin();
   targetNode.innerHTML = '';
   routes[name](bindings, targetNode)
   .then(stopSpinning, stopSpinning)
