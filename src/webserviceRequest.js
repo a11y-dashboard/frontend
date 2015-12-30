@@ -13,7 +13,7 @@ module.exports = (endpoint, _opts, _method) => {
 
   return (descriptorPromise || (descriptorPromise = getServiceDescriptor()))
   .then((descriptor) => {
-    logger.debug(`${method.toUpperCase()}ing webservice with enpoint /${endpoint}`);
+    logger.debug(`${method.toUpperCase()}ing webservice with endpoint /${endpoint}`);
     return promisedXhr(method.toLowerCase(), objectAssign({}, opts, {
       uri: `${descriptor.webservice}/${endpoint}`,
       useXDR: true,
