@@ -16,9 +16,14 @@ function setupRoute(name, bindings, cb) {
 
   AJS.$('#routeSpinner').spin();
   targetNode.innerHTML = '';
+
   routes[name](bindings, targetNode)
   .then(stopSpinning, stopSpinning)
-  .then(cb, (err) => logger.error(err));
+  .then(() => {
+    logger.debug('calling route callback');
+    cb();
+  })
+  .catch((err) => logger.error(err));
 }
 
 Finch.route('details/:project/:date/:level', (bindings, cb) => {
