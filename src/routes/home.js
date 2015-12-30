@@ -91,7 +91,7 @@ function drawChart(datapoints, origin, target) {
     if (type) {
       logger.debug('Clicked chart');
       const timestamp = Date.parse(date);
-      Finch.navigate(`details/${origin}/${timestamp}/${type}`);
+      Finch.navigate(`details/${origin}/${timestamp}/?type=${type}`);
     }
   });
 }

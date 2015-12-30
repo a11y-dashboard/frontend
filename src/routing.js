@@ -26,7 +26,7 @@ function setupRoute(name, bindings, cb) {
   .catch((err) => logger.error(err));
 }
 
-Finch.route('details/:project/:date/:level', (bindings, cb) => {
+Finch.route('details/:project/:timestamp/', (bindings, cb) => {
   return setupRoute('details', bindings, cb);
 });
 
