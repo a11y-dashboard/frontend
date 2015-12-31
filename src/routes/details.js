@@ -135,7 +135,7 @@ module.exports = (options, targetNode) => {
         return;
       }
       logger.debug(`Changed standards to ${e.val}`);
-      Finch.navigate({ standard: e.val.join(',') }, true);
+      Finch.navigate({ standard: e.val.join(',') || undefined }, true);
     });
     logger.debug('initializing level select');
     getLevelElement().addEventListener('change', (e) => {

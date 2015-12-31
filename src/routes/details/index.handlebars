@@ -8,7 +8,6 @@
 <p>
     <form class="aui">
         <div class="aui-group">
-
             <div class="aui-item">
                 <strong>Filter: </strong>
                 <label for="url" title="reverse domain name notation">URL</label>
@@ -17,7 +16,7 @@
                 <label for="standards">Standard</label>
                 <select id="standards" multiple="">
                     {{#each stats.standards}}
-                        <option value="{{this}}">
+                        <option value="{{#if this}}{{this}}{{else}}best-practice{{/if}}">
                             {{#if this}}{{this}}{{else}}best practice{{/if}}
                         </option>
                     {{/each}}
