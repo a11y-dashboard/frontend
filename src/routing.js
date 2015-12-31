@@ -1,8 +1,11 @@
+import homeRoute from './routes/home.jsx';
+import detailsRoute from './routes/details.jsx';
+
 const logger = require('./logger');
 const Finch = require('finchjs');
 const routes = {
-  home: require('./routes/home'),
-  details: require('./routes/details'),
+  home: homeRoute,
+  details: detailsRoute,
 };
 
 function stopSpinning() {

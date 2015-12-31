@@ -4,16 +4,18 @@ const logger = require('../logger');
 const webserviceRequest = require('../webserviceRequest');
 const queryString = require('query-string');
 const _ = require('lodash');
-const hljs = require('highlight.js');
 const moment = require('moment');
 const projects = require('../projects.json');
-const template = require('./details/index.handlebars');
-const listTemplate = require('./details/list.handlebars');
 const Finch = require('finchjs');
 const objectAssign = require('object-assign');
 
 require('highlight.js/styles/default.css');
 require('../css/details.less');
+
+import ReactDOM from 'react-dom';
+import React from 'react';
+import Details from './components/Details';
+import Filter from './components/Filter';
 
 function transformCulprits(culprits) {
   const data = {};
@@ -101,11 +103,15 @@ function startObserve(baseQuery) {
     logger.debug('Observed parameters changed');
     spinStart();
     updateCulprits(baseQuery, params)
-    .then(spinStop, spinStop);
+    .then(spinStop, (err) => {
+      spinStop();
+      logger.error(err);
+      throw err;
+    });
   });
 }
 
-module.exports = (options, targetNode) => {
+export default (options, targetNode) => {
   logger.debug('Show details', options);
 
   const baseQuery = {
@@ -119,16 +125,19 @@ module.exports = (options, targetNode) => {
     const stats = response.body;
     logger.debug('stats arrived', stats);
 
-    targetNode.innerHTML = template({
-      project: projects[options.project],
-      absoluteTime: date.format(),
-      relativeTime: date.fromNow(),
-      urlNumber: Object.keys(stats.urls).length,
-      stats,
-    });
+    const filter = <Filter standards={stats.standards} levels={stats.levels}/>;
 
+    ReactDOM.render(<Details
+      project={projects[options.project]}
+      absoluteTime={date.format()}
+      relativeTime={date.fromNow()}
+      urlNumber={Object.keys(stats.urls).length}
+      culpritNumber={stats.count}
+      filter={filter}
+    />, targetNode);
     return stats;
-  })
+  });
+  /*
   .then((stats) => {
     logger.debug('initializing standard select');
     const select = $getStandardsElement().auiSelect2();
@@ -158,4 +167,5 @@ module.exports = (options, targetNode) => {
     });
   })
   .then(() => startObserve(baseQuery));
+  */
 };

@@ -21,6 +21,7 @@ const config = {
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-au/),
   ],
   resolve: {
+    extensions: ['', '.js', '.jsx'],
     alias: {
       'finchjs': path.join('finchjs', 'finch.js'),
       'moment': path.join('moment', 'moment'),
@@ -29,17 +30,16 @@ const config = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
         loader: 'babel',
+        query: {
+          presets: ['react', 'es2015'],
+        },
       },
       {
         test: /\.json$/,
         loader: 'json',
-      },
-      {
-        test: /\.handlebars$/,
-        loader: 'handlebars-loader',
       },
       {
         test: /\.less$/,
