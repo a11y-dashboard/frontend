@@ -53,11 +53,12 @@ function $getStandardsElement() {
 
 function updateCulprits(baseQuery, params) {
   logger.debug('Updating culprits');
-  const query = objectAssign({}, baseQuery, {
-    level: params('type'),
+  const queryParams = {
+    level: params('type') || 'error',
     reverseDns: params('reverseDns'),
     standard: params('standard') || undefined,
-  });
+  };
+  const query = objectAssign({}, baseQuery, queryParams);
 
   logger.debug('query', query);
 
@@ -132,12 +133,6 @@ module.exports = (options, targetNode) => {
     logger.debug('initializing standard select');
     const select = $getStandardsElement().auiSelect2();
 
-    // by default we will select Section508 and WCAG2AA to show (if available)
-    const defaults = _.intersection(stats.standards, ['wcag2aa', 'section508']);
-    if (defaults.length) {
-      select.val(defaults).trigger('change');
-    }
-
     select.on('change', (e) => {
       if (!e || !e.val) {
         logger.debug('ignoring change');
@@ -146,10 +141,20 @@ module.exports = (options, targetNode) => {
       logger.debug(`Changed standards to ${e.val}`);
       Finch.navigate({ standard: e.val.join(',') || undefined }, true);
     });
+
+    // by default we will select Section508 and WCAG2AA to show (if available)
+    const defaults = _.intersection(stats.standards, ['wcag2aa', 'section508']);
+    if (defaults.length) {
+      const event = AJS.$.Event('change'); // eslint-disable-line new-cap
+      event.val = defaults;
+      select.val(defaults).trigger(event);
+    }
+
     logger.debug('initializing level select');
+    getLevelElement().value = baseQuery.level || 'error';
     getLevelElement().addEventListener('change', (e) => {
       logger.debug(`Changed level to ${e.target.value}`);
-      Finch.navigate({ type: e.target.value }, true);
+      Finch.navigate({ level: e.target.value }, true);
     });
   })
   .then(() => startObserve(baseQuery));
