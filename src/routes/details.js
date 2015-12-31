@@ -125,10 +125,19 @@ module.exports = (options, targetNode) => {
       urlNumber: Object.keys(stats.urls).length,
       stats,
     });
+
+    return stats;
   })
-  .then(() => {
+  .then((stats) => {
     logger.debug('initializing standard select');
     const select = $getStandardsElement().auiSelect2();
+
+    // by default we will select Section508 and WCAG2AA to show (if available)
+    const defaults = _.intersection(stats.standards, ['wcag2aa', 'section508']);
+    if (defaults.length) {
+      select.val(defaults).trigger('change');
+    }
+
     select.on('change', (e) => {
       if (!e || !e.val) {
         logger.debug('ignoring change');
