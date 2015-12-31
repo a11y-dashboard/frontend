@@ -18,7 +18,10 @@ function setupRoute(name, bindings, cb) {
   targetNode.innerHTML = '';
 
   routes[name](bindings, targetNode)
-  .then(stopSpinning, stopSpinning)
+  .then(stopSpinning, (err) => {
+    stopSpinning();
+    throw err;
+  })
   .then(() => {
     logger.debug('calling route callback');
     cb();
