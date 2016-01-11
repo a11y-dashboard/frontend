@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const baseConfig = require('./webpack.config.js');
 
 const config = objectAssign({}, baseConfig, {
-  devtool: 'eval-source-map',
+  devtool: 'eval',
 });
 
 config.entry.unshift('webpack-hot-middleware/client?reload=true');
