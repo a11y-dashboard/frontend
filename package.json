@@ -66,6 +66,7 @@
     "query-string": "^3.0.0",
     "react": "^0.14.5",
     "react-dom": "^0.14.5",
+    "react-google-charts": "^0.2.0",
     "react-router": "^1.0.3",
     "rimraf": "^2.4.4",
     "style-loader": "^0.13.0",
