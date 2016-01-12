@@ -25,6 +25,7 @@ const config = {
     alias: {
       'finchjs': path.join('finchjs', 'finch.js'),
       'moment': path.join('moment', 'moment'),
+      'highlight.js$': path.join('highlight.js', 'lib', 'highlight.js'),
     },
   },
   module: {

@@ -1,6 +1,9 @@
 import React from 'react';
 import hljs from 'highlight.js';
 
+hljs.registerLanguage('css', require('highlight.js/lib/languages/css'));
+hljs.registerLanguage('html', require('highlight.js/lib/languages/xml'));
+
 require('highlight.js/styles/default.css');
 
 hljs.configure({
