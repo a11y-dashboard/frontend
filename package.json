@@ -12,6 +12,7 @@
     "dev:docker:boot": ". ./test/.env.local && docker-compose up",
     "dev:local:local": ". ./test/.env.local && npm run dev:local",
     "dev:local:ddev": ". ./test/.env.ddev && npm run dev:local",
+    "prod:local:ddev": ". ./test/.env.ddev.prod && docker-compose rm -rf && docker-compose up",
     "lint": "eslint .",
     "postinstall": "npm run build -- --colors",
     "start": "node .",
