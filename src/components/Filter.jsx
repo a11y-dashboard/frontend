@@ -1,8 +1,8 @@
 import React from 'react';
-import levels from '../../data/levels.json';
-import logger from '../../logger';
+import levels from '../data/levels.json';
+import logger from '../logger';
 import queryString from 'query-string';
-import history from '../../history';
+import history from '../history';
 import objectAssign from 'object-assign';
 import _ from 'lodash';
 

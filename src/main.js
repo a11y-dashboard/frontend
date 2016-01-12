@@ -3,9 +3,9 @@ import { render } from 'react-dom';
 import { Router, Route, IndexRoute } from 'react-router';
 import history from './history';
 
-import Home from './routes/components/Home';
-import Details from './routes/components/Details';
-import App from './routes/components/App';
+import Home from './components/Home';
+import Details from './components/Details';
+import App from './components/App';
 
 render((
   <Router history={history}>

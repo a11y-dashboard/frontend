@@ -31,7 +31,6 @@ class App extends React.Component {
         <div className="aui-page-panel">
           <div className="aui-page-panel-inner">
             <section className="aui-page-panel-content">
-              <div id="routeSpinner"></div>
               {this.props.children}
             </section>
           </div>

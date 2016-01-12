@@ -1,14 +1,15 @@
 import React from 'react';
 import { Chart } from 'react-google-charts';
-const webserviceRequest = require('../../webserviceRequest');
-const logger = require('../../logger');
 const moment = require('moment');
-const projects = require('../../data/projects.json');
-const adgColors = require('../../data/adgColors.json');
-const levels = require('../../data/levels.json');
 import queryString from 'query-string';
 
-import history from '../../history';
+const webserviceRequest = require('../webserviceRequest');
+const logger = require('../logger');
+import history from '../history';
+
+const projects = require('../data/projects.json');
+const adgColors = require('../data/adgColors.json');
+const levels = require('../data/levels.json');
 
 const columnTypes = {
   2: 'error',
@@ -26,6 +27,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    this.spinStart();
     webserviceRequest('overview')
       .then((data) => {
         const transformed = {};
@@ -126,9 +128,18 @@ class Home extends React.Component {
       .then((state) => {
         this.setState({ charts: state });
       })
+      .then(() => this.spinStop())
       .catch((err) => {
         logger.error(err);
       });
+  }
+
+  spinStart() {
+    AJS.$(this.refs.spinner).spin();
+  }
+
+  spinStop() {
+    AJS.$(this.refs.spinner).spinStop();
   }
 
   render() {
@@ -163,6 +174,7 @@ class Home extends React.Component {
       <div>
         <h2>Products</h2>
         <p>Select a point of an error or warning within a chart below to show details for the according product &amp; time.</p>
+        <div ref="spinner"></div>
         <div>
           {charts}
         </div>

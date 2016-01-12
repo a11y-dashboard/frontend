@@ -5,14 +5,14 @@ import queryString from 'query-string';
 import deepEqual from 'deep-equal';
 import objectAssign from 'object-assign';
 
-import projects from '../../data/projects.json';
-import webserviceRequest from '../../webserviceRequest';
-import logger from '../../logger';
+import projects from '../data/projects.json';
+import webserviceRequest from '../webserviceRequest';
+import logger from '../logger';
 
 import Filter from './Filter';
 import List from './List';
 
-require('../../styles/details.less');
+require('../styles/details.less');
 
 function transformCulprits(culprits) {
   const data = {};
