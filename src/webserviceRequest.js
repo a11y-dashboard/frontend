@@ -17,6 +17,12 @@ module.exports = (endpoint, _opts, _method) => {
     return promisedXhr(method.toLowerCase(), objectAssign({}, opts, {
       uri: `${descriptor.webservice}/${endpoint}`,
       useXDR: true,
-    }));
+    }))
+    .then((payload) => {
+      if (payload.body.statusCode && payload.body.statusCode >= 300) {
+        throw new Error(payload.body.message);
+      }
+      return payload.body;
+    });
   });
 };

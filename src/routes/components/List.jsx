@@ -1,34 +1,49 @@
 import React from 'react';
 
+import Table from './Table';
+
 class List extends React.Component {
   render() {
+    const lis = Object.keys(this.props.culprits).map((url) => {
+      const items = this.props.culprits[url];
+
+      const itemLis = Object.keys(items).map((itemKey) => {
+        const item = items[itemKey];
+
+        return Object.keys(item).map((key) => {
+          const value = item[key];
+          const standardLozenges = value.standards.map((standard) => {
+            return (<span key={standard || 'best-practice'} className="aui-lozenge aui-lozenge-complete">{standard || 'best practice'}</span>);
+          });
+          return (<li key={key} className="selectors-per-message">
+                      <h4>{key}
+                          <span className="aui-lozenge" title={value.code}>{value.origin}</span>
+                          {standardLozenges}
+                      </h4>
+                      <Table rows={value.rows} />
+                  </li>);
+        });
+      });
+
+      return (<li key={url}>
+          <h3><a href={url} target="_blank">{url}</a></h3>
+          <ol className="errors-per-url" type="a">
+          {itemLis}
+          </ol>
+      </li>);
+    });
+
     return (
       <ol>
-      {{#each data}}
-      <li>
-          <h3><a href="{{@key}}" target="_blank">{{@key}}</a></h3>
-          <ol class="errors-per-url" type="a">
-              {{#each this}}
-                  {{#each this}}
-                      <li class="selectors-per-message">
-                          <h4>{{@key}}
-                              <span class="aui-lozenge" title="{{this.code}}">{{this.origin}}</span>
-                              {{#each this.standards}}
-                                  {{#if this}}
-                                  <span class="aui-lozenge aui-lozenge-complete">{{this}}</span>
-                                  {{/if}}
-                              {{/each}}
-                          </h4>
-                          {{> table rows=this.rows}}
-                      </li>
-                  {{/each}}
-              {{/each}}
-          </ol>
-      </li>
-      {{/each}}
+      {lis}
       </ol>
     );
   }
 }
+
+List.propTypes = {
+  culprits: React.PropTypes.object.isRequired,
+};
+
 
 export default List;

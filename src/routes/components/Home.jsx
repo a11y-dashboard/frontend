@@ -3,9 +3,10 @@ import { Chart } from 'react-google-charts';
 const webserviceRequest = require('../../webserviceRequest');
 const logger = require('../../logger');
 const moment = require('moment');
-const projects = require('../../projects.json');
-const adgColors = require('../../adgColors.json');
-const levels = require('../../levels.json');
+const projects = require('../../data/projects.json');
+const adgColors = require('../../data/adgColors.json');
+const levels = require('../../data/levels.json');
+import queryString from 'query-string';
 
 import history from '../../history';
 
@@ -26,7 +27,6 @@ class Home extends React.Component {
 
   componentDidMount() {
     webserviceRequest('overview')
-      .then((obj) => obj.body)
       .then((data) => {
         const transformed = {};
         Object.keys(data).forEach((origin) => {
@@ -148,7 +148,7 @@ class Home extends React.Component {
             if (type) {
               logger.debug('Clicked chart');
               const timestamp = Date.parse(date);
-              history.replaceState(null, `/details/${chartData.origin}/${timestamp}/?level=${type}`);
+              history.pushState(null, `/details/${chartData.origin}/${timestamp}/?${queryString.stringify({ level: type })}`);
             }
           },
         },

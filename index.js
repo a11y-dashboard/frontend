@@ -31,7 +31,7 @@ if (process.env.NODE_ENV !== 'development') {
   const distFolder = path.join(__dirname, 'dist');
 
   app.use(express.static(distFolder));
-  app.get('/', (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(path.join(distFolder, 'index.html'));
   });
 } else {
@@ -42,15 +42,26 @@ if (process.env.NODE_ENV !== 'development') {
 
   const wp = webpack(webpackConfig);
 
-  app.use(webpackDevMiddleware(wp, {
+  const devMiddleware = webpackDevMiddleware(wp, {
     publicPath: webpackConfig.output.publicPath,
     contentBase: 'src',
     stats: {
       colors: true,
     },
-  }));
-
+  });
+  app.use(devMiddleware);
   app.use(webpackHotMiddleware(wp));
+
+  // This is for always passing index.html when using pushState
+  app.get('*', (req, res) => {
+    devMiddleware.fileSystem.readFile(path.join(webpackConfig.output.path, 'index.html'), (err, contents) => {
+      if (err) {
+        logger.error(err);
+        throw err;
+      }
+      res.end(contents);
+    });
+  });
 }
 
 app.listen(port, HOST, (err) => {

@@ -5,16 +5,13 @@ import history from './history';
 
 import Home from './routes/components/Home';
 import Details from './routes/components/Details';
-
-const logger = require('./logger');
+import App from './routes/components/App';
 
 render((
   <Router history={history}>
-    <Route path="/" component={Home}>
+    <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      <Route path="details/:project/:timestamp/" component={Details}/>
+      <Route path="/details/:project/:timestamp/" component={Details}/>
     </Route>
   </Router>
 ), document.getElementById('main'));
-
-//require('./routing');
