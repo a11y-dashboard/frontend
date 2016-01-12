@@ -11,6 +11,7 @@
     "dev:local:docker": "npm run dev:local -- -L",
     "dev:docker:boot": ". ./test/.env.local && docker-compose up",
     "dev:local:local": ". ./test/.env.local && npm run dev:local",
+    "dev:prodtest": ". ./test/.env.local.prod && docker-compose up",
     "dev:local:ddev": ". ./test/.env.ddev && npm run dev:local",
     "prod:local:ddev": ". ./test/.env.ddev.prod && docker-compose rm -rf && docker-compose up",
     "lint": "eslint .",
