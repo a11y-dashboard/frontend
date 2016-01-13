@@ -187,8 +187,8 @@ class Home extends React.Component {
 
     return (
       <div>
-        <p>Select a point of an error or warning within a chart below to show details for the according product &amp; time.</p>
         <h2>Overview (last month)</h2>
+        <p>Click a point of an error or warning within a chart below to show details for the according project &amp; point in time.</p>
         <div ref="spinner"></div>
         <div>
           {charts}
