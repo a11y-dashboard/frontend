@@ -167,10 +167,14 @@ class Home extends React.Component {
           },
         },
       ];
-      chartRenderPromises.push(new Promise((resolve) => {
+      chartRenderPromises.push(new Promise((resolve, reject) => {
         chartEvents.push({
           eventName: 'ready',
           callback: resolve,
+        });
+        chartEvents.push({
+          eventName: 'error',
+          callback: reject,
         });
       }));
 
@@ -178,12 +182,15 @@ class Home extends React.Component {
                 <Chart chartType="LineChart" rows={chartData.rows} columns={chartData.columns} options={chartData.options} width={"600px"} height={"250px"} chartEvents={chartEvents} />
               </div>);
     });
-    Promise.all(chartRenderPromises).then(() => {
-      if (charts.length) {
+    if (chartRenderPromises.length) {
+      Promise.all(chartRenderPromises).then(() => {
         logger.debug('All charts rendered');
         this.spinStop();
-      }
-    });
+      }, (err) => {
+        logger.error('Something went wrong when rendering the charts', err);
+        this.spinStop();
+      });
+    }
 
     return (
       <div>
