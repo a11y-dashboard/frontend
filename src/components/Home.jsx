@@ -30,6 +30,7 @@ class Home extends React.Component {
     this.spinStart();
     webserviceRequest('overview')
       .then((data) => {
+        logger.debug('Calculate averages of', data);
         const transformed = {};
         Object.keys(data).forEach((origin) => {
           const originalDatapoints = data[origin].datapoints;
@@ -56,7 +57,7 @@ class Home extends React.Component {
         return transformed;
       })
       .then((transformed) => {
-        logger.debug('assembling chart data');
+        logger.debug('assembling chart data', transformed);
 
         const state = [];
 
@@ -126,23 +127,27 @@ class Home extends React.Component {
         return state;
       })
       .then((state) => {
+        logger.debug('setting chart state', state);
         this.setState({ charts: state });
       })
-      .then(() => this.spinStop())
       .catch((err) => {
         logger.error(err);
       });
   }
 
   spinStart() {
+    logger.debug('spinner: start');
     AJS.$(this.refs.spinner).spin();
   }
 
   spinStop() {
+    logger.debug('spinner: stop');
     AJS.$(this.refs.spinner).spinStop();
   }
 
   render() {
+    logger.debug('rendering...');
+    const chartRenderPromises = [];
     const charts = this.state.charts.map((chartData) => {
       const chartEvents = [
         {
@@ -164,10 +169,22 @@ class Home extends React.Component {
           },
         },
       ];
+      chartRenderPromises.push(new Promise((resolve) => {
+        chartEvents.push({
+          eventName: 'ready',
+          callback: resolve,
+        });
+      }));
 
       return (<div style={{ float: 'left' }} key={chartData.origin}>
                 <Chart chartType="LineChart" rows={chartData.rows} columns={chartData.columns} options={chartData.options} width={"600px"} height={"250px"} chartEvents={chartEvents} />
               </div>);
+    });
+    Promise.all(chartRenderPromises).then(() => {
+      if (charts.length) {
+        logger.debug('All charts rendered');
+        this.spinStop();
+      }
     });
 
     return (

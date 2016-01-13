@@ -67,6 +67,7 @@ class Details extends React.Component {
   }
 
   componentDidMount() {
+    this.spinStart();
     webserviceRequest(`details.stats?${queryString.stringify(this.getBaseQuery(this.props))}`)
     .then((stats) => {
       logger.debug('stats arrived', stats);
