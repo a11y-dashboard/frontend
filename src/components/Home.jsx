@@ -28,19 +28,17 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.spinStart();
-    webserviceRequest('overview')
+    const lastMonth = moment().subtract(1, 'month').format('x');
+    const queryParams = {
+      minTimestamp: lastMonth,
+    };
+    webserviceRequest(`overview?${queryString.stringify(queryParams)}`)
       .then((data) => {
         logger.debug('Calculate averages of', data);
         const transformed = {};
         Object.keys(data).forEach((origin) => {
           const originalDatapoints = data[origin].datapoints;
-          const lastMonth = moment().subtract(1, 'month');
-          const validTimestamps = Object.keys(originalDatapoints).filter((timestamp) => {
-            return moment(parseInt(timestamp, 10)).isAfter(lastMonth);
-          });
-
-          logger.debug('Calculate averages');
-          const datapoints = validTimestamps.map((timestamp) => {
+          const datapoints = Object.keys(originalDatapoints).map((timestamp) => {
             const datapoint = originalDatapoints[timestamp];
             const ret = {
               urls: datapoint.urls || null,
@@ -189,8 +187,8 @@ class Home extends React.Component {
 
     return (
       <div>
-        <h2>Products</h2>
         <p>Select a point of an error or warning within a chart below to show details for the according product &amp; time.</p>
+        <h2>Overview (last month)</h2>
         <div ref="spinner"></div>
         <div>
           {charts}
