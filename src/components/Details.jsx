@@ -179,27 +179,34 @@ class Details extends React.Component {
     } else if (Object.keys(this.state.culprits).length) {
       list = (<List key={this.state.query.level} culprits={this.state.culprits} />);
     }
+    let overview;
+    let filter;
+    if (this.state.culprits !== null) {
+      overview = (<p>There are
+                      <span>&nbsp;{Object.keys(this.state.stats.urls).length}</span>
+                      &nbsp;unique URLs with a total of
+                      <span>&nbsp;{this.state.stats.count}</span>
+                      &nbsp;culprits on record.
+                      <br/>
+                      Please use the filter below to restrict the displayed culprits.
+                  </p>);
+
+      filter = (<Filter
+        currentLevel={this.state.query.level}
+        levels={this.state.stats.levels}
+        selectedStandards={this.state.query.standard}
+        standards={this.state.stats.standards}
+        reverseDns={this.state.query.reverseDns || ''}
+      />);
+    }
     return (
         <div>
             <h2>Details for
                 <span>&nbsp;{projects[project]}</span>
                 <span title={date.format()}>&nbsp;{date.fromNow()}</span>
             </h2>
-            <p>There are
-                <span>&nbsp;{Object.keys(this.state.stats.urls).length}</span>
-                &nbsp;unique URLs with a total of
-                <span>&nbsp;{this.state.stats.count}</span>
-                &nbsp;culprits on record.
-                <br/>
-                Please use the filter below to restrict the displayed culprits.
-            </p>
-            <Filter
-              currentLevel={this.state.query.level}
-              levels={this.state.stats.levels}
-              selectedStandards={this.state.query.standard}
-              standards={this.state.stats.standards}
-              reverseDns={this.state.query.reverseDns || ''}
-            />
+            {overview}
+            {filter}
             <div ref="spinner"></div>
             {list}
         </div>
