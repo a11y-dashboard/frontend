@@ -156,10 +156,12 @@ class Details extends React.Component {
       }
     })
     .then(() => this.spinStop())
+    .then(() => AJS.$(this.refs.spinner).hide())
     .catch((err) => logger.error(err));
   }
 
   spinStart() {
+    AJS.$(this.refs.spinner).show()
     AJS.$(this.refs.spinner).spin();
   }
 
@@ -182,14 +184,7 @@ class Details extends React.Component {
     let overview;
     let filter;
     if (this.state.culprits !== null) {
-      overview = (<p>There are
-                      <span>&nbsp;{Object.keys(this.state.stats.urls).length}</span>
-                      &nbsp;unique URLs with a total of
-                      <span>&nbsp;{this.state.stats.count}</span>
-                      &nbsp;culprits on record.
-                      <br/>
-                      Please use the filter below to restrict the displayed culprits.
-                  </p>);
+      overview = (<p className="result-count">Showing {this.state.stats.count} results from {Object.keys(this.state.stats.urls).length} URLs</p>);
 
       filter = (<Filter
         currentLevel={this.state.query.level}
@@ -200,16 +195,20 @@ class Details extends React.Component {
       />);
     }
     return (
-        <div>
-            <h2>Details for
-                <span>&nbsp;{projects[project]}</span>
-                <span title={date.format()}>&nbsp;{date.fromNow()}</span>
-            </h2>
-            {overview}
+      <div className="aui-page-panel">
+        <div className="aui-page-panel-inner">
+          <section className="aui-page-panel-sidebar">
+            <h2>Filter</h2>
             {filter}
-            <div ref="spinner"></div>
+          </section>
+          <section className="aui-page-panel-content">
+            <h2>Results for <span>{projects[project]}</span> (<time title={date.format()}>{date.fromNow()}</time>)</h2>
+            <div className="details-spinner" ref="spinner"></div>
+            {overview}
             {list}
+          </section>
         </div>
+      </div>
     );
   }
 }

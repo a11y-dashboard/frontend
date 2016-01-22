@@ -10,7 +10,7 @@ class App extends React.Component {
             <div className="aui-header-primary">
               <h1 id="logo" className="aui-header-logo aui-header-logo-aui">
                   <Link to="/">
-                      <span className="aui-icon aui-icon-large aui-iconfont-review" style={{ 'marginTop': '4px' }}>Accessibility Dashboard logo</span>
+                      <span className="aui-icon aui-icon-large aui-iconfont-review" style={{ 'marginTop': '4px' }}>Accessibility Dashboard</span>
                   </Link>
               </h1>
               <ul className="aui-nav">
@@ -24,17 +24,11 @@ class App extends React.Component {
         <header className="aui-page-header">
           <div className="aui-page-header-inner">
             <div className="aui-page-header-main">
-              <h1>Atlassian Accessibility Dashboard</h1>
+              <h1>Accessibility Dashboard</h1>
             </div>
           </div>
         </header>
-        <div className="aui-page-panel">
-          <div className="aui-page-panel-inner">
-            <section className="aui-page-panel-content">
-              {this.props.children}
-            </section>
-          </div>
-        </div>
+        {this.props.children}
       </section>
       <footer id="footer" role="contentinfo">
         <section className="footer-body">
