@@ -16,10 +16,8 @@ class List extends React.Component {
             return (<span key={standard || 'best-practice'} className="aui-lozenge aui-lozenge-complete">{standard || 'best practice'}</span>);
           });
           return (<li key={key} className="selectors-per-message">
-                      <h4>{key}
-                          <span className="aui-lozenge" title={value.code}>{value.origin}</span>
-                          {standardLozenges}
-                      </h4>
+                      <h4>{key}</h4>
+                      <span className="aui-lozenge" title={value.code}>{value.origin}</span>{standardLozenges}
                       <Table rows={value.rows} />
                   </li>);
         });
@@ -34,7 +32,7 @@ class List extends React.Component {
     });
 
     return (
-      <ol>
+      <ol className="result-list">
       {lis}
       </ol>
     );
