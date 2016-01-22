@@ -50,8 +50,16 @@ class Filter extends React.Component {
       initLevelSelect();
     }
 
+    onClearClick(e) {
+      e.preventDefault();
+      this.setState({
+        reverseDns: '',
+      });
+      historyUpdate({ reverseDns: null });
+    }
+
     render() {
-      let levelSelect = null;
+      let selectElement = null;
       if (this.props.levels.length) {
         const options = this.props.levels.map((level) => {
           const extraAttrs = {};
@@ -61,11 +69,11 @@ class Filter extends React.Component {
           return <aui-option key={level} {...extraAttrs}>{level}</aui-option>;
         });
 
-        levelSelect = (
-          <div className="field-group">
-            <aui-label for="level">Error level</aui-label>
-            <aui-select class="full-width-field" value={this.props.currentLevel} id="level" name="level" placeholder="Select a level">{options}</aui-select>
-          </div>
+        selectElement = (
+          <span>
+            <aui-label for="level">Level</aui-label>
+            <aui-select value={this.props.currentLevel} id="level" name="level" placeholder="Select a level">{options}</aui-select>
+          </span>
         );
       }
 
@@ -86,14 +94,12 @@ class Filter extends React.Component {
           return <option key={standard} value={standard || 'best-practice'}>{standard || 'best practice'}</option>;
         });
 
-        standardsSelect = (
-          <div className="field-group">
-            <label htmlFor="standards">Tags</label>
-            <select id="standards" multiple="multiple" ref={initStandardsSelect} value={this.props.selectedStandards} onChange={() => {}} style={{width: '100%'}}>
-                {options}
-            </select>
-          </div>
-        );
+        standardsSelect = (<span>
+                            <label htmlFor="standards">Standard</label>
+                            <select id="standards" multiple="multiple" ref={initStandardsSelect} value={this.props.selectedStandards} onChange={() => {}}>
+                                {options}
+                            </select>
+                          </span>);
       }
 
       const value = this.state.reverseDns === null ? this.props.reverseDns : this.state.reverseDns;
@@ -105,21 +111,27 @@ class Filter extends React.Component {
         });
       };
 
+      let reset = null;
+      if (value) {
+        reset = (<a className="cancel" href="#reset" onClick={this.onClearClick.bind(this)}>Reset</a>);
+      }
+
       return (
-        <form className="aui top-label">
-          <div className="field-group">
-            <label htmlFor="url" title="reverse domain name notation">Page URL</label>
-            <input id="reverseDns" className="text full-width-field" name="reverseDns" ref="reverseDns" placeholder="eg. %jira%admin%" type="text" onChange={onUrlChange} value={value}/>
+      <form className="aui">
+          <div className="aui-group">
+              <div className="aui-item">
+                  <strong>Filter:
+                  </strong>
+                  <label htmlFor="url" title="reverse domain name notation">Reverse DNS</label>
+                  <input id="reverseDns" className="text medium-field" name="reverseDns" ref="reverseDns" placeholder="%" type="text" onChange={onUrlChange} value={value}/>
+                  <div className="aui-buttons">
+                      {reset}
+                  </div>
+                  {selectElement}
+                  {standardsSelect}
+              </div>
           </div>
-          {levelSelect}
-          {standardsSelect}
-          <div className="buttons-container">
-            <div className="buttons">
-              <button className="aui-button aui-button-primary submit">Update</button>
-            </div>
-          </div>
-        </form>
-      );
+      </form>);
     }
 }
 

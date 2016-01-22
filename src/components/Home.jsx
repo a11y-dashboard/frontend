@@ -28,7 +28,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.spinStart();
-    const lastMonth = moment().subtract(4, 'weeks').format('x');
+    const lastMonth = moment().subtract(1, 'month').format('x');
     const queryParams = {
       minTimestamp: lastMonth,
     };
@@ -94,6 +94,7 @@ class Home extends React.Component {
           });
 
           const options = {
+            title: projects[origin],
             pointSize: 5,
             width: 600,
             height: 250,
@@ -119,7 +120,6 @@ class Home extends React.Component {
             columns,
             rows,
             options,
-            title: projects[origin],
           });
         });
         return state;
@@ -178,8 +178,7 @@ class Home extends React.Component {
         });
       }));
 
-      return (<div className="chart-group" key={chartData.origin}>
-                <h3>{chartData.title}</h3>
+      return (<div style={{ float: 'left' }} key={chartData.origin}>
                 <Chart chartType="LineChart" rows={chartData.rows} columns={chartData.columns} options={chartData.options} width={"600px"} height={"250px"} chartEvents={chartEvents} />
               </div>);
     });
@@ -194,16 +193,12 @@ class Home extends React.Component {
     }
 
     return (
-      <div className="aui-page-panel">
-        <div className="aui-page-panel-inner">
-          <section className="aui-page-panel-content">
-            <h2>4 week overview</h2>
-            <p>Click a point of an error or warning within a chart below to show details for the according project &amp; point in time.</p>
-            <div ref="spinner"></div>
-            <div>
-              {charts}
-            </div>
-          </section>
+      <div>
+        <h2>Overview (last month)</h2>
+        <p>Click a point of an error or warning within a chart below to show details for the according project &amp; point in time.</p>
+        <div ref="spinner"></div>
+        <div>
+          {charts}
         </div>
       </div>
     );

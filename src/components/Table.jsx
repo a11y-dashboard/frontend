@@ -18,25 +18,45 @@ class Table extends React.Component {
       }
     };
 
-    //TODO: Work out what to do with the selector information
     return (
-      <ol className="context-info">
-      {this.props.rows.map((row) => {
-        return (
-          <li key={row.id}>
-            {row.help_url ? (
-                <a className="how-to-fix" title="How to fix this error" href={row.help_url} ref={(el) => AJS.$(el).tooltip({gravity: 's'}) } target="_blank">
-                  <span className="aui-icon aui-icon-small aui-iconfont-info">How to fix</span>
-                </a>
-              ) : ''
-            }
-            {row.context ? <pre><code className="html" ref={highlightBlock}>{row.context}</code></pre> : 'n/a'}
-            <span style={{display: 'none'}}>{row.selector}</span>
-            
-          </li>
-        );
-      })}
-      </ol>
+      <table className="aui">
+        <thead>
+          <tr>
+            <th id="selector">Selector</th>
+            <th id="context">Context</th>
+            <th id="action">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.rows.map((row) => {
+            return (
+              <tr key={row.id}>
+                <td headers="selector">
+                  <pre><code className="css" ref={highlightBlock}>{row.selector}</code></pre>
+                </td>
+                <td headers="context">
+                  {row.context
+                    ? <pre><code className="html" ref={highlightBlock}>{row.context}</code></pre>
+                    : 'n/a'}
+                </td>
+                <td className="action" headers="action">
+                  <ul className="menu">
+                    {row.help_url
+                      ? (
+                        <li>
+                          <a href={row.help_url} target="_blank">
+                            <span className="aui-icon aui-icon-small aui-iconfont-info" title="Help">Help</span>
+                          </a>
+                        </li>
+                      )
+                      : ''}
+                  </ul>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     );
   }
 }
