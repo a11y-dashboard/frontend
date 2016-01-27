@@ -17,7 +17,6 @@ const config = {
       inject: 'body',
       filename: 'index.html',
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-au/),
   ],
   resolve: {
@@ -41,6 +40,10 @@ const config = {
       {
         test: /\.json$/,
         loader: 'json',
+      },
+      {
+        test: /\.html$/,
+        loader: 'html',
       },
       {
         test: /\.less$/,

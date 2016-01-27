@@ -2,13 +2,13 @@ import React from 'react';
 import levels from '../data/levels.json';
 import logger from '../logger';
 import queryString from 'query-string';
-import history from '../history';
+import { browserHistory } from 'react-router';
 import objectAssign from 'object-assign';
 import _ from 'lodash';
 
 function historyUpdate(newState) {
   setTimeout(() => {
-    history.replace({
+    browserHistory.replace({
       pathname: window.location.pathname,
       search: '?' + queryString.stringify(objectAssign({}, queryString.parse(window.location.search), newState)),
     });

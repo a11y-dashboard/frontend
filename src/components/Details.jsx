@@ -16,7 +16,7 @@ require('../styles/details.less');
 
 function transformCulprits(culprits) {
   const data = {};
-  const sortedRows = _.sortByAll(culprits, ['reverse_dns', 'origin_library', 'code', 'message', 'selector']);
+  const sortedRows = _.sortBy(culprits, ['reverse_dns', 'origin_library', 'code', 'message', 'selector']);
 
   sortedRows.forEach((row) => {
     data[row.original_url] = data[row.original_url] || {};

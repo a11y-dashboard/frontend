@@ -5,7 +5,7 @@ import queryString from 'query-string';
 
 const webserviceRequest = require('../webserviceRequest');
 const logger = require('../logger');
-import history from '../history';
+import { browserHistory } from 'react-router';
 
 const projects = require('../data/projects.json');
 const adgColors = require('../data/adgColors.json');
@@ -164,7 +164,7 @@ class Home extends React.Component {
               if (type) {
                 logger.debug('Clicked chart');
                 const timestamp = Date.parse(date);
-                history.pushState(null, `/details/${chartData.origin}/${timestamp}/?${queryString.stringify({ level: type })}`);
+                browserHistory.push(`/details/${chartData.origin}/${timestamp}/?${queryString.stringify({ level: type })}`);
               }
             },
           },
