@@ -18,7 +18,6 @@ class Table extends React.Component {
       }
     };
 
-    //TODO: Work out what to do with the selector information
     return (
       <ol className="context-info">
       {this.props.rows.map((row) => {
@@ -31,8 +30,7 @@ class Table extends React.Component {
               ) : ''
             }
             {row.context ? <pre><code className="html" ref={highlightBlock}>{row.context}</code></pre> : 'n/a'}
-            <span style={{display: 'none'}}>{row.selector}</span>
-            
+            <span className="selector">{row.selector}</span>
           </li>
         );
       })}
