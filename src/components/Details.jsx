@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import _ from 'lodash';
+import sortBy from 'lodash/sortBy';
+import uniq from 'lodash/uniq';
 import queryString from 'query-string';
 import deepEqual from 'deep-equal';
 import objectAssign from 'object-assign';
@@ -16,7 +17,7 @@ require('../styles/details.less');
 
 function transformCulprits(culprits) {
   const data = {};
-  const sortedRows = _.sortBy(culprits, ['reverse_dns', 'origin_library', 'code', 'message', 'selector']);
+  const sortedRows = sortBy(culprits, ['reverse_dns', 'origin_library', 'code', 'message', 'selector']);
 
   sortedRows.forEach((row) => {
     data[row.original_url] = data[row.original_url] || {};
@@ -36,7 +37,7 @@ function transformCulprits(culprits) {
       standards.sort();
     }
     perMessage.rows.push(row);
-    perMessage.rows = _.uniq(perMessage.rows, 'selector');
+    perMessage.rows = uniq(perMessage.rows, 'selector');
   });
   return data;
 }
@@ -126,14 +127,11 @@ class Details extends React.Component {
 
   getFilterQuery(props) {
     const { query } = props.location;
-    // by default we will select Section508 and WCAG2AA to show (if available)
-    const queryStandards = query.standards instanceof Array ? query.standards : [query.standards];
-    const selectedStandards = query.standards ? queryStandards : _.intersection(this.state.stats.standards, ['wcag2aa', 'section508']);
 
     return {
-      standard: selectedStandards,
+      standard: query.standard || [],
       level: query.level || 'error',
-      reverseDns: query.reverseDns || undefined,
+      url: query.url || undefined,
     };
   }
 
@@ -145,13 +143,18 @@ class Details extends React.Component {
     return webserviceRequest(`details?${queryString.stringify(queryParams)}`)
     .then((culprits) => {
       logger.debug('transform culprits', culprits);
-      return transformCulprits(culprits);
+      return {
+        totalFiltered: culprits.length,
+        transformed: transformCulprits(culprits),
+      };
     })
-    .then((transformed) => {
+    .then(({ transformed, totalFiltered }) => {
       logger.debug('transformed culprits', transformed);
       if (!this.ignoreLastXhr) {
         this.setState({
           culprits: transformed,
+          totalFiltered,
+          urlsFiltered: Object.keys(transformed).length,
         });
       }
     })
@@ -184,14 +187,18 @@ class Details extends React.Component {
     let overview;
     let filter;
     if (this.state.culprits !== null) {
-      overview = (<p className="result-count">Showing {this.state.stats.count} results from {Object.keys(this.state.stats.urls).length} URLs</p>);
+      overview = (<p className="result-count">
+        {this.state.stats.count} results from {Object.keys(this.state.stats.urls).length} URLs on record.
+        Showing {this.state.totalFiltered} from {this.state.urlsFiltered} URLs.</p>);
+
+      const queryStandard = this.state.query.standard instanceof Array ? this.state.query.standard : [this.state.query.standard];
 
       filter = (<Filter
         currentLevel={this.state.query.level}
         levels={this.state.stats.levels}
-        selectedStandards={this.state.query.standard}
+        selectedStandards={queryStandard}
         standards={this.state.stats.standards}
-        reverseDns={this.state.query.reverseDns || ''}
+        url={this.state.query.url || ''}
       />);
     }
     return (

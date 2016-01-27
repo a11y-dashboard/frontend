@@ -1,37 +1,8 @@
 import React from 'react';
 import levels from '../data/levels.json';
 import logger from '../logger';
-import queryString from 'query-string';
 import { browserHistory } from 'react-router';
-import objectAssign from 'object-assign';
-import _ from 'lodash';
-
-function historyUpdate(newState) {
-  setTimeout(() => {
-    browserHistory.replace({
-      pathname: window.location.pathname,
-      search: '?' + queryString.stringify(objectAssign({}, queryString.parse(window.location.search), newState)),
-    });
-  });
-}
-const changeLevel = (e) => {
-  logger.debug(`Changed level to ${e.target.value}`);
-  historyUpdate({ level: e.target.value || 'error' });
-};
-
-function initLevelSelect() {
-  logger.debug('init level select');
-  const levelSelect = document.getElementById('level');
-  if (levelSelect) {
-    levelSelect.removeEventListener('change', changeLevel);
-    levelSelect.addEventListener('change', changeLevel);
-  }
-}
-
-const urlUpdate = _.debounce((url) => {
-  logger.debug('filter URLs by', url);
-  historyUpdate({ reverseDns: url || undefined });
-}, 250);
+import serialize from 'form-serialize';
 
 class Filter extends React.Component {
 
@@ -42,15 +13,18 @@ class Filter extends React.Component {
     };
   }
 
-    componentDidMount() {
-      initLevelSelect();
-    }
-
-    componentDidUpdate() {
-      initLevelSelect();
+    onFormSubmit(e) {
+      e.preventDefault();
+      const query = serialize(e.target);
+      browserHistory.push({
+        pathname: window.location.pathname,
+        search: `?${query}`,
+      });
     }
 
     render() {
+      logger.debug('rendering filter');
+
       let levelSelect = null;
       if (this.props.levels.length) {
         const options = this.props.levels.map((level) => {
@@ -71,45 +45,29 @@ class Filter extends React.Component {
 
       let standardsSelect = null;
       if (this.props.standards.length) {
-        const initStandardsSelect = (select) => {
-          logger.debug('init standards select');
-          AJS.$(select)
-            .auiSelect2()
-            .off('change')
-            .on('change', (e) => {
-              logger.debug(`Changed standards to ${e.val}`);
-              historyUpdate({ standards: e.val });
-            });
-        };
-
-        const options = this.props.standards.map((standard) => {
-          return <option key={standard} value={standard || 'best-practice'}>{standard || 'best practice'}</option>;
+        const checkboxes = this.props.standards.map((standard) => {
+          const key = standard || 'best-practice';
+          const value = standard || 'best practice';
+          const checked = this.props.selectedStandards.indexOf(standard) !== -1;
+          return (<div key={key} className="checkbox">
+                    <input className="checkbox" type="checkbox" name="standard" defaultChecked={checked} value={key} id={key} />
+                    <label htmlFor={key}>{value}</label>
+                  </div>);
         });
 
         standardsSelect = (
-          <div className="field-group">
-            <label htmlFor="standards">Tags</label>
-            <select id="standards" multiple="multiple" ref={initStandardsSelect} value={this.props.selectedStandards} onChange={() => {}} style={{ width: '100%' }}>
-                {options}
-            </select>
-          </div>
+            <fieldset className="group">
+                 <legend><span>Tags</span></legend>
+                 {checkboxes}
+             </fieldset>
         );
       }
 
-      const value = this.state.reverseDns === null ? this.props.reverseDns : this.state.reverseDns;
-
-      const onUrlChange = (e) => {
-        urlUpdate(e.target.value);
-        this.setState({
-          reverseDns: e.target.value || '',
-        });
-      };
-
       return (
-        <form className="aui top-label">
+        <form className="aui top-label" onSubmit={this.onFormSubmit}>
           <div className="field-group">
-            <label htmlFor="url" title="reverse domain name notation">Page URL</label>
-            <input id="reverseDns" className="text full-width-field" name="reverseDns" ref="reverseDns" placeholder="eg. %jira%admin%" type="text" onChange={onUrlChange} value={value}/>
+            <label htmlFor="url" title="Use % as a wildcard">Page URL</label>
+            <input id="url" className="text full-width-field" name="url" ref="url" placeholder="eg. %jira%admin%" type="text" defaultValue={this.props.url}/>
           </div>
           {levelSelect}
           {standardsSelect}
@@ -124,7 +82,7 @@ class Filter extends React.Component {
 }
 
 Filter.propTypes = {
-  reverseDns: React.PropTypes.string.isRequired,
+  url: React.PropTypes.string.isRequired,
   standards: React.PropTypes.array.isRequired,
   selectedStandards: React.PropTypes.array.isRequired,
   levels: React.PropTypes.array.isRequired,
