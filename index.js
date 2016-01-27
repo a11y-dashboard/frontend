@@ -54,7 +54,8 @@ if (process.env.NODE_ENV !== 'development') {
 
   // This is for always passing index.html when using pushState
   app.get('*', (req, res) => {
-    devMiddleware.fileSystem.readFile(path.join(webpackConfig.output.path, 'index.html'), (err, contents) => {
+    const indexFile = path.join(webpackConfig.output.path, 'index.html');
+    devMiddleware.fileSystem.readFile(indexFile, (err, contents) => {
       if (err) {
         logger.error(err);
         throw err;

@@ -22,7 +22,7 @@ const config = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      'moment': path.join('moment', 'moment'),
+      moment: path.join('moment', 'moment'),
       'highlight.js$': path.join('highlight.js', 'lib', 'highlight.js'),
     },
   },

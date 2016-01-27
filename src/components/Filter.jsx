@@ -89,7 +89,7 @@ class Filter extends React.Component {
         standardsSelect = (
           <div className="field-group">
             <label htmlFor="standards">Tags</label>
-            <select id="standards" multiple="multiple" ref={initStandardsSelect} value={this.props.selectedStandards} onChange={() => {}} style={{width: '100%'}}>
+            <select id="standards" multiple="multiple" ref={initStandardsSelect} value={this.props.selectedStandards} onChange={() => {}} style={{ width: '100%' }}>
                 {options}
             </select>
           </div>
