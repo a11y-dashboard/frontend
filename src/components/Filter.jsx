@@ -54,7 +54,7 @@ class Filter extends React.Component {
         const checkboxes = this.props.standards.map((standard) => {
           const key = standard || 'best-practice';
           const value = standard || 'best practice';
-          const checked = this.props.selectedStandards.indexOf(standard) !== -1;
+          const checked = this.props.selectedStandards.indexOf(key) !== -1;
           return (<div key={key} className="checkbox">
                     <input
                       className="checkbox"
