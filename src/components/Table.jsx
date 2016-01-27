@@ -25,7 +25,7 @@ class Table extends React.Component {
         return (
           <li key={row.id}>
             {row.help_url ? (
-                <a className="how-to-fix" title="How to fix this error" href={row.help_url} ref={(el) => AJS.$(el).tooltip({gravity: 's'}) } target="_blank">
+                <a className="how-to-fix" title="How to fix this error" href={row.help_url} ref={(el) => AJS.$(el).tooltip({ gravity: 's' }) } target="_blank">
                   <span className="aui-icon aui-icon-small aui-iconfont-info">How to fix</span>
                 </a>
               ) : ''
