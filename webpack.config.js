@@ -17,14 +17,12 @@ const config = {
       inject: 'body',
       filename: 'index.html',
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-au/),
   ],
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      'finchjs': path.join('finchjs', 'finch.js'),
-      'moment': path.join('moment', 'moment'),
+      moment: path.join('moment', 'moment'),
       'highlight.js$': path.join('highlight.js', 'lib', 'highlight.js'),
     },
   },
@@ -43,16 +41,16 @@ const config = {
         loader: 'json',
       },
       {
+        test: /\.html$/,
+        loader: 'html',
+      },
+      {
         test: /\.less$/,
         loader: 'style!css!less',
       },
       {
         test: /\.css$/,
         loader: 'style!css',
-      },
-      {
-        test: /finchjs/,
-        loader: 'exports?this.Finch',
       },
     ],
   },

@@ -5,7 +5,7 @@ import queryString from 'query-string';
 
 const webserviceRequest = require('../webserviceRequest');
 const logger = require('../logger');
-import history from '../history';
+import { browserHistory } from 'react-router';
 
 const projects = require('../data/projects.json');
 const adgColors = require('../data/adgColors.json');
@@ -28,7 +28,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.spinStart();
-    const lastMonth = moment().subtract(1, 'month').format('x');
+    const lastMonth = moment().subtract(4, 'weeks').format('x');
     const queryParams = {
       minTimestamp: lastMonth,
     };
@@ -83,18 +83,15 @@ class Home extends React.Component {
             },
           ];
 
-          const rows = transformed[origin].map((datapoint) => {
-            return [
-              datapoint.date,
-              datapoint.urls,
-              datapoint.error,
-              datapoint.warning,
-              datapoint.notice,
-            ];
-          });
+          const rows = transformed[origin].map((datapoint) => [
+            datapoint.date,
+            datapoint.urls,
+            datapoint.error,
+            datapoint.warning,
+            datapoint.notice,
+          ]);
 
           const options = {
-            title: projects[origin],
             pointSize: 5,
             width: 600,
             height: 250,
@@ -120,6 +117,7 @@ class Home extends React.Component {
             columns,
             rows,
             options,
+            title: projects[origin],
           });
         });
         return state;
@@ -145,60 +143,83 @@ class Home extends React.Component {
 
   render() {
     logger.debug('rendering...');
-    const chartRenderPromises = [];
-    const charts = this.state.charts.map((chartData) => {
-      const chartEvents = [
-        {
-          eventName: 'select',
-          callback: (c) => {
-            const chart = c.wrapper.getChart();
-            const selection = chart.getSelection();
-            const item = selection[0];
-            if (!item) {
-              return;
-            }
-            const date = chartData.rows[item.row][0];
-            const type = columnTypes[item.column];
-            if (type) {
-              logger.debug('Clicked chart');
-              const timestamp = Date.parse(date);
-              history.pushState(null, `/details/${chartData.origin}/${timestamp}/?${queryString.stringify({ level: type })}`);
-            }
+    let charts;
+    if (this.state.charts.length) {
+      const chartRenderPromises = [];
+      charts = this.state.charts.map((chartData) => {
+        const chartEvents = [
+          {
+            eventName: 'select',
+            callback: (c) => {
+              const chart = c.wrapper.getChart();
+              const selection = chart.getSelection();
+              const item = selection[0];
+              if (!item) {
+                return;
+              }
+              const date = chartData.rows[item.row][0];
+              const type = columnTypes[item.column];
+              if (type) {
+                logger.debug('Clicked chart');
+                const timestamp = Date.parse(date);
+                const query = queryString.stringify({ level: type });
+                browserHistory.push(`/details/${chartData.origin}/${timestamp}/?${query}`);
+              }
+            },
           },
-        },
-      ];
-      chartRenderPromises.push(new Promise((resolve, reject) => {
-        chartEvents.push({
-          eventName: 'ready',
-          callback: resolve,
-        });
-        chartEvents.push({
-          eventName: 'error',
-          callback: reject,
-        });
-      }));
+        ];
+        chartRenderPromises.push(new Promise((resolve, reject) => {
+          chartEvents.push({
+            eventName: 'ready',
+            callback: resolve,
+          });
+          chartEvents.push({
+            eventName: 'error',
+            callback: reject,
+          });
+        }));
 
-      return (<div style={{ float: 'left' }} key={chartData.origin}>
-                <Chart chartType="LineChart" rows={chartData.rows} columns={chartData.columns} options={chartData.options} width={"600px"} height={"250px"} chartEvents={chartEvents} />
-              </div>);
-    });
-    if (chartRenderPromises.length) {
-      Promise.all(chartRenderPromises).then(() => {
-        logger.debug('All charts rendered');
-        this.spinStop();
-      }, (err) => {
-        logger.error('Something went wrong when rendering the charts', err);
-        this.spinStop();
+        return (<div className="chart-group" key={chartData.origin}>
+                  <h3>{chartData.title}</h3>
+                  <Chart
+                    chartType="LineChart"
+                    rows={chartData.rows}
+                    columns={chartData.columns}
+                    options={chartData.options}
+                    width={"600px"}
+                    height={"250px"}
+                    chartEvents={chartEvents}
+                  />
+                </div>);
       });
+      if (chartRenderPromises.length) {
+        Promise.all(chartRenderPromises).then(() => {
+          logger.debug('All charts rendered');
+          this.spinStop();
+        }, (err) => {
+          logger.error('Something went wrong when rendering the charts', err);
+          this.spinStop();
+        });
+      }
+    } else {
+      charts = 'No projects';
+      this.spinStop();
     }
 
     return (
-      <div>
-        <h2>Overview (last month)</h2>
-        <p>Click a point of an error or warning within a chart below to show details for the according project &amp; point in time.</p>
-        <div ref="spinner"></div>
-        <div>
-          {charts}
+      <div className="aui-page-panel">
+        <div className="aui-page-panel-inner">
+          <section className="aui-page-panel-content">
+            <h2>4 week overview</h2>
+            <p>
+              Click a point of an error or warning
+              within a chart below to show details
+              for the according project &amp; point in time.</p>
+            <div ref="spinner"></div>
+            <div>
+              {charts}
+            </div>
+          </section>
         </div>
       </div>
     );
