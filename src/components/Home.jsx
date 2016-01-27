@@ -145,52 +145,58 @@ class Home extends React.Component {
 
   render() {
     logger.debug('rendering...');
-    const chartRenderPromises = [];
-    const charts = this.state.charts.map((chartData) => {
-      const chartEvents = [
-        {
-          eventName: 'select',
-          callback: (c) => {
-            const chart = c.wrapper.getChart();
-            const selection = chart.getSelection();
-            const item = selection[0];
-            if (!item) {
-              return;
-            }
-            const date = chartData.rows[item.row][0];
-            const type = columnTypes[item.column];
-            if (type) {
-              logger.debug('Clicked chart');
-              const timestamp = Date.parse(date);
-              history.pushState(null, `/details/${chartData.origin}/${timestamp}/?${queryString.stringify({ level: type })}`);
-            }
+    let charts;
+    if (this.state.charts.length) {
+      const chartRenderPromises = [];
+      charts = this.state.charts.map((chartData) => {
+        const chartEvents = [
+          {
+            eventName: 'select',
+            callback: (c) => {
+              const chart = c.wrapper.getChart();
+              const selection = chart.getSelection();
+              const item = selection[0];
+              if (!item) {
+                return;
+              }
+              const date = chartData.rows[item.row][0];
+              const type = columnTypes[item.column];
+              if (type) {
+                logger.debug('Clicked chart');
+                const timestamp = Date.parse(date);
+                history.pushState(null, `/details/${chartData.origin}/${timestamp}/?${queryString.stringify({ level: type })}`);
+              }
+            },
           },
-        },
-      ];
-      chartRenderPromises.push(new Promise((resolve, reject) => {
-        chartEvents.push({
-          eventName: 'ready',
-          callback: resolve,
-        });
-        chartEvents.push({
-          eventName: 'error',
-          callback: reject,
-        });
-      }));
+        ];
+        chartRenderPromises.push(new Promise((resolve, reject) => {
+          chartEvents.push({
+            eventName: 'ready',
+            callback: resolve,
+          });
+          chartEvents.push({
+            eventName: 'error',
+            callback: reject,
+          });
+        }));
 
-      return (<div className="chart-group" key={chartData.origin}>
-                <h3>{chartData.title}</h3>
-                <Chart chartType="LineChart" rows={chartData.rows} columns={chartData.columns} options={chartData.options} width={"600px"} height={"250px"} chartEvents={chartEvents} />
-              </div>);
-    });
-    if (chartRenderPromises.length) {
-      Promise.all(chartRenderPromises).then(() => {
-        logger.debug('All charts rendered');
-        this.spinStop();
-      }, (err) => {
-        logger.error('Something went wrong when rendering the charts', err);
-        this.spinStop();
+        return (<div className="chart-group" key={chartData.origin}>
+                  <h3>{chartData.title}</h3>
+                  <Chart chartType="LineChart" rows={chartData.rows} columns={chartData.columns} options={chartData.options} width={"600px"} height={"250px"} chartEvents={chartEvents} />
+                </div>);
       });
+      if (chartRenderPromises.length) {
+        Promise.all(chartRenderPromises).then(() => {
+          logger.debug('All charts rendered');
+          this.spinStop();
+        }, (err) => {
+          logger.error('Something went wrong when rendering the charts', err);
+          this.spinStop();
+        });
+      }
+    } else {
+      charts = 'No projects';
+      this.spinStop();
     }
 
     return (
