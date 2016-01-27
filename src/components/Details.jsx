@@ -161,7 +161,7 @@ class Details extends React.Component {
   }
 
   spinStart() {
-    AJS.$(this.refs.spinner).show()
+    AJS.$(this.refs.spinner).show();
     AJS.$(this.refs.spinner).spin();
   }
 
