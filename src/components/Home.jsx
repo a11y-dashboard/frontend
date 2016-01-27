@@ -83,15 +83,13 @@ class Home extends React.Component {
             },
           ];
 
-          const rows = transformed[origin].map((datapoint) => {
-            return [
-              datapoint.date,
-              datapoint.urls,
-              datapoint.error,
-              datapoint.warning,
-              datapoint.notice,
-            ];
-          });
+          const rows = transformed[origin].map((datapoint) => [
+            datapoint.date,
+            datapoint.urls,
+            datapoint.error,
+            datapoint.warning,
+            datapoint.notice,
+          ]);
 
           const options = {
             pointSize: 5,
@@ -164,7 +162,8 @@ class Home extends React.Component {
               if (type) {
                 logger.debug('Clicked chart');
                 const timestamp = Date.parse(date);
-                browserHistory.push(`/details/${chartData.origin}/${timestamp}/?${queryString.stringify({ level: type })}`);
+                const query = queryString.stringify({ level: type });
+                browserHistory.push(`/details/${chartData.origin}/${timestamp}/?${query}`);
               }
             },
           },
@@ -182,7 +181,15 @@ class Home extends React.Component {
 
         return (<div className="chart-group" key={chartData.origin}>
                   <h3>{chartData.title}</h3>
-                  <Chart chartType="LineChart" rows={chartData.rows} columns={chartData.columns} options={chartData.options} width={"600px"} height={"250px"} chartEvents={chartEvents} />
+                  <Chart
+                    chartType="LineChart"
+                    rows={chartData.rows}
+                    columns={chartData.columns}
+                    options={chartData.options}
+                    width={"600px"}
+                    height={"250px"}
+                    chartEvents={chartEvents}
+                  />
                 </div>);
       });
       if (chartRenderPromises.length) {
@@ -204,7 +211,10 @@ class Home extends React.Component {
         <div className="aui-page-panel-inner">
           <section className="aui-page-panel-content">
             <h2>4 week overview</h2>
-            <p>Click a point of an error or warning within a chart below to show details for the according project &amp; point in time.</p>
+            <p>
+              Click a point of an error or warning
+              within a chart below to show details
+              for the according project &amp; point in time.</p>
             <div ref="spinner"></div>
             <div>
               {charts}

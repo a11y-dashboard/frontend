@@ -10,7 +10,12 @@ class App extends React.Component {
             <div className="aui-header-primary">
               <h1 id="logo" className="aui-header-logo aui-header-logo-aui">
                   <Link to="/">
-                      <span className="aui-icon aui-icon-large aui-iconfont-review" style={{ 'marginTop': '4px' }}>Accessibility Dashboard</span>
+                      <span
+                        className="aui-icon aui-icon-large aui-iconfont-review"
+                        style={{ marginTop: '4px' }}
+                      >
+                        Accessibility Dashboard
+                      </span>
                   </Link>
               </h1>
               <ul className="aui-nav">

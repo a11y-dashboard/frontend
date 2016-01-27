@@ -17,13 +17,19 @@ require('../styles/details.less');
 
 function transformCulprits(culprits) {
   const data = {};
-  const sortedRows = sortBy(culprits, ['reverse_dns', 'origin_library', 'code', 'message', 'selector']);
+  const sortedRows = sortBy(culprits, [
+    'reverse_dns',
+    'origin_library',
+    'code',
+    'message',
+    'selector',
+  ]);
 
   sortedRows.forEach((row) => {
     data[row.original_url] = data[row.original_url] || {};
     const errorKey = `${row.origin_library}.${row.code}`;
-    data[row.original_url][errorKey] = data[row.original_url][errorKey] || {};
-    data[row.original_url][errorKey][row.message] = data[row.original_url][errorKey][row.message] || {
+    const err = data[row.original_url][errorKey] = data[row.original_url][errorKey] || {};
+    err[row.message] = err[row.message] || {
       rows: [],
       standards: [],
       origin: row.origin_library,
@@ -69,23 +75,17 @@ class Details extends React.Component {
 
   componentDidMount() {
     this.spinStart();
-    webserviceRequest(`details.stats?${queryString.stringify(this.getBaseQuery(this.props))}`)
-    .then((stats) => {
+    const query = queryString.stringify(this.getBaseQuery(this.props));
+    webserviceRequest(`details.stats?${query}`).then((stats) => {
       logger.debug('stats arrived', stats);
       return stats;
-    })
-    .then((stats) => {
-      this.setState({
-        stats,
-      });
-    })
-    .then(() => this.updateCulprits());
+    }).then((stats) => {
+      this.setState({ stats });
+    }).then(() => this.updateCulprits());
   }
 
   componentWillReceiveProps() {
-    this.setState({
-      culprits: null,
-    });
+    this.setState({ culprits: null });
   }
 
   componentDidUpdate(prevProps) {
@@ -106,9 +106,7 @@ class Details extends React.Component {
     const query = this.getQuery(this.props);
 
     logger.debug('setting query state', query);
-    this.setState({
-      query,
-    });
+    this.setState({ query });
     return query;
   }
 
@@ -119,10 +117,7 @@ class Details extends React.Component {
   getBaseQuery(props) {
     const { project, timestamp } = props.params;
 
-    return {
-      origin: project,
-      timestamp,
-    };
+    return { origin: project, timestamp };
   }
 
   getFilterQuery(props) {
@@ -140,15 +135,13 @@ class Details extends React.Component {
     this.spinStart();
     const queryParams = this.setQueryState();
 
-    return webserviceRequest(`details?${queryString.stringify(queryParams)}`)
-    .then((culprits) => {
+    return webserviceRequest(`details?${queryString.stringify(queryParams)}`).then((culprits) => {
       logger.debug('transform culprits', culprits);
       return {
         totalFiltered: culprits.length,
         transformed: transformCulprits(culprits),
       };
-    })
-    .then(({ transformed, totalFiltered }) => {
+    }).then(({ transformed, totalFiltered }) => {
       logger.debug('transformed culprits', transformed);
       if (!this.ignoreLastXhr) {
         this.setState({
@@ -158,9 +151,9 @@ class Details extends React.Component {
         });
       }
     })
-    .then(() => this.spinStop())
-    .then(() => AJS.$(this.refs.spinner).hide())
-    .catch((err) => logger.error(err));
+      .then(() => this.spinStop())
+      .then(() => AJS.$(this.refs.spinner).hide())
+      .catch((err) => logger.error(err));
   }
 
   spinStart() {
@@ -174,7 +167,7 @@ class Details extends React.Component {
 
   render() {
     const { project, timestamp } = this.props.params;
-    const date = moment(+timestamp);
+    const date = moment(+ timestamp);
 
     let list;
     if (this.state.culprits === null) {
@@ -182,16 +175,22 @@ class Details extends React.Component {
     } else if (Object.keys(this.state.culprits).length === 0) {
       list = <h3>Filter matched nothing</h3>;
     } else if (Object.keys(this.state.culprits).length) {
-      list = (<List key={this.state.query.level} culprits={this.state.culprits} />);
+      list = (<List key={this.state.query.level} culprits={this.state.culprits}/>);
     }
     let overview;
     let filter;
     if (this.state.culprits !== null) {
-      overview = (<p className="result-count">
-        {this.state.stats.count} results from {Object.keys(this.state.stats.urls).length} URLs on record.
-        Showing {this.state.totalFiltered} from {this.state.urlsFiltered} URLs.</p>);
+      const totalUrls = Object.keys(this.state.stats.urls).length;
+      overview = (
+        <p className="result-count">
+          {this.state.stats.count} results from {totalUrls} URLs on record.
+          Current filter is showing {this.state.totalFiltered} from {this.state.urlsFiltered} URLs.
+        </p>
+      );
 
-      const queryStandard = this.state.query.standard instanceof Array ? this.state.query.standard : [this.state.query.standard];
+      const queryStandard = this.state.query.standard instanceof Array
+        ? this.state.query.standard
+        : [this.state.query.standard];
 
       filter = (<Filter
         currentLevel={this.state.query.level}
@@ -201,6 +200,7 @@ class Details extends React.Component {
         url={this.state.query.url || ''}
       />);
     }
+    const projectName = projects[project];
     return (
       <div className="aui-page-panel">
         <div className="aui-page-panel-inner">
@@ -209,7 +209,10 @@ class Details extends React.Component {
             {filter}
           </section>
           <section className="aui-page-panel-content">
-            <h2>Results for <span>{projects[project]}</span> (<time title={date.format()}>{date.fromNow()}</time>)</h2>
+            <h2>
+              Results for <span>{projectName}</span>
+              &nbsp;(<time title={date.format()}>{date.fromNow()}</time>)
+            </h2>
             <div className="details-spinner" ref="spinner"></div>
             {overview}
             {list}

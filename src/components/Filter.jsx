@@ -38,7 +38,13 @@ class Filter extends React.Component {
         levelSelect = (
           <div className="field-group">
             <aui-label for="level">Error level</aui-label>
-            <aui-select class="full-width-field" value={this.props.currentLevel} id="level" name="level" placeholder="Select a level">{options}</aui-select>
+            <aui-select
+              class="full-width-field"
+              value={this.props.currentLevel}
+              id="level"
+              name="level"
+              placeholder="Select a level"
+            >{options}</aui-select>
           </div>
         );
       }
@@ -50,7 +56,14 @@ class Filter extends React.Component {
           const value = standard || 'best practice';
           const checked = this.props.selectedStandards.indexOf(standard) !== -1;
           return (<div key={key} className="checkbox">
-                    <input className="checkbox" type="checkbox" name="standard" defaultChecked={checked} value={key} id={key} />
+                    <input
+                      className="checkbox"
+                      type="checkbox"
+                      name="standard"
+                      defaultChecked={checked}
+                      value={key}
+                      id={key}
+                    />
                     <label htmlFor={key}>{value}</label>
                   </div>);
         });
@@ -67,7 +80,14 @@ class Filter extends React.Component {
         <form className="aui top-label" onSubmit={this.onFormSubmit}>
           <div className="field-group">
             <label htmlFor="url" title="Use % as a wildcard">Page URL</label>
-            <input id="url" className="text full-width-field" name="url" ref="url" placeholder="eg. %jira%admin%" type="text" defaultValue={this.props.url}/>
+            <input
+              id="url"
+              className="text full-width-field"
+              name="url"
+              placeholder="eg. %jira%admin%"
+              type="text"
+              defaultValue={this.props.url}
+            />
           </div>
           {levelSelect}
           {standardsSelect}
