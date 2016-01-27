@@ -22,7 +22,6 @@ const config = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
-      'finchjs': path.join('finchjs', 'finch.js'),
       'moment': path.join('moment', 'moment'),
       'highlight.js$': path.join('highlight.js', 'lib', 'highlight.js'),
     },
@@ -52,10 +51,6 @@ const config = {
       {
         test: /\.css$/,
         loader: 'style!css',
-      },
-      {
-        test: /finchjs/,
-        loader: 'exports?this.Finch',
       },
     ],
   },
