@@ -16,10 +16,23 @@ class Filter extends React.Component {
     onFormSubmit(e) {
       e.preventDefault();
       const query = serialize(e.target);
-      browserHistory.push({
-        pathname: window.location.pathname,
-        search: `?${query}`,
-      });
+      const search = `?${query}`;
+      if (window.location.search !== search) {
+        browserHistory.push({
+          pathname: window.location.pathname,
+          search,
+        });
+      } else {
+        if (this.flag) {
+          this.flag.close();
+        }
+        this.flag = AJS.flag({
+          type: 'info',
+          title: 'Filter unchanged',
+          close: 'auto',
+          body: 'The filter selection has not changed since your last search.',
+        });
+      }
     }
 
     render() {
@@ -76,8 +89,10 @@ class Filter extends React.Component {
         );
       }
 
+      const boundFormSubmit = this.onFormSubmit.bind(this);
+
       return (
-        <form className="aui top-label" onSubmit={this.onFormSubmit}>
+        <form className="aui top-label" onSubmit={boundFormSubmit}>
           <div className="field-group">
             <label htmlFor="url" title="Use % as a wildcard">Page URL</label>
             <input
