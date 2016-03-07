@@ -10,7 +10,7 @@ render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      <Route path="/details/:project/:timestamp/" component={Details}/>
+      <Route path="/details/:project/:timestamp/" component={Details} />
     </Route>
   </Router>
 ), document.getElementById('main'));

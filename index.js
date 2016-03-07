@@ -67,7 +67,8 @@ if (process.env.NODE_ENV !== 'development') {
 
 app.listen(port, HOST, (err) => {
   if (err) {
-    return logger.error(err);
+    logger.error(err);
+    return;
   }
   logger.info(`Listening on ${HOST}:${port}.`);
 });
