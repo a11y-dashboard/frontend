@@ -24,10 +24,6 @@ It needs backing by the [Accessibility Dashboard Webservice](https://bitbucket.o
 You should download and spin up an instance of the [Accessibility Dashboard Webservice](https://bitbucket.org/atlassian/a11y-dashboard-webservice/) first and then use the `WEBSERVICE_URL` environment variable to point the Dashboard against it. For an example you can have a look at the dotfiles in `/test` and the according command in `package.json`.
 
 ***
-##Documentation
-This should be a link to any relevant project documentation, such as APIs, config or install instructions, etc.
-
-***
 ## How to contribute
 PRs are welcome!
 
