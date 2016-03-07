@@ -32,6 +32,7 @@ You can spin up a dev instance via running `npm run dev:local:local` - it is als
 Make sure your code lints (`npm run lint`) and the tests are green (`npm test`).
 
 Please sign the according Atlassian CLA before making any contributions:
+
 * [Corporate CLA](https://na2.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=e1c17c66-ca4d-4aab-a953-2c231af4a20b)
 * [Individual CLA](https://na2.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=3f94fbdc-2fbe-46ac-b14c-5d152700ae5d)
 
