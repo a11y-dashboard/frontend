@@ -180,10 +180,9 @@ class Details extends React.Component {
     let overview;
     let filter;
     if (this.state.culprits !== null) {
-      const totalUrls = Object.keys(this.state.stats.urls).length;
       overview = (
         <p className="result-count">
-          {this.state.stats.count} results from {totalUrls} URLs on record.
+          {this.state.stats.count} results from {this.state.stats.urls.length} URLs on record.
           Current filter is showing {this.state.totalFiltered} from {this.state.urlsFiltered} URLs.
         </p>
       );
