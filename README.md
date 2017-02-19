@@ -1,5 +1,7 @@
 # Accessibility Dashboard Frontend
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/joscha/a11y-dashboard.svg)](https://greenkeeper.io/)
+
 This project is the front end part of the Accessibility Dashboard. It allows a visitor to see an aggregated overview of accessibility issues and has features that allows to drill into this aggregated data and view issues per URL and filter them by standards.
 
 Landing page:
