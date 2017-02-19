@@ -10,7 +10,7 @@ Detail view:
 
 ![a11y-dashboard-details.png](https://bitbucket.org/repo/74nR9n/images/654127562-a11y-dashboard-details.png)
 
-It needs backing by the [Accessibility Dashboard Webservice](https://bitbucket.org/atlassian/a11y-dashboard-webservice/).
+It needs backing by the [Accessibility Dashboard Webservice](https://github.com/joscha/a11y-dashboard-webservice/).
 
 ## Project Features
 * Overview charts for data in an instance of the [Accessibility Dashboard Webservice](https://github.com/joscha/a11y-dashboard-webservice/).
