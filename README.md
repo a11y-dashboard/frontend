@@ -10,10 +10,10 @@ Detail view:
 
 ![a11y-dashboard-details.png](https://bitbucket.org/repo/74nR9n/images/654127562-a11y-dashboard-details.png)
 
-It needs backing by the [Accessibility Dashboard Webservice](https://github.com/joscha/a11y-dashboard-webservice/).
+It needs backing by the [Accessibility Dashboard Webservice](https://github.com/a11y-dashboard/webservice).
 
 ## Project Features
-* Overview charts for data in an instance of the [Accessibility Dashboard Webservice](https://github.com/joscha/a11y-dashboard-webservice/).
+* Overview charts for data in an instance of the [Accessibility Dashboard Webservice](https://github.com/a11y-dashboard/webservice).
 * Drilling down into a project and showing per-URL errors.
 * Filtering by URL, error level and tag (standard)
 
@@ -21,7 +21,7 @@ It needs backing by the [Accessibility Dashboard Webservice](https://github.com/
 ***
 ## Getting started
 
-You should download and spin up an instance of the [Accessibility Dashboard Webservice](https://github.com/joscha/a11y-dashboard-webservice/) first and then use the `WEBSERVICE_URL` environment variable to point the Dashboard against it. For an example you can have a look at the dotfiles in `/test` and the according command in `package.json`.
+You should download and spin up an instance of the [Accessibility Dashboard Webservice](https://github.com/a11y-dashboard/webservice) first and then use the `WEBSERVICE_URL` environment variable to point the Dashboard against it. For an example you can have a look at the dotfiles in `/test` and the according command in `package.json`.
 
 ***
 ## How to contribute
