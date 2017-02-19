@@ -13,7 +13,7 @@ Detail view:
 It needs backing by the [Accessibility Dashboard Webservice](https://bitbucket.org/atlassian/a11y-dashboard-webservice/).
 
 ## Project Features
-* Overview charts for data in an instance of the [Accessibility Dashboard Webservice](https://bitbucket.org/atlassian/a11y-dashboard-webservice/).
+* Overview charts for data in an instance of the [Accessibility Dashboard Webservice](https://github.com/joscha/a11y-dashboard-webservice/).
 * Drilling down into a project and showing per-URL errors.
 * Filtering by URL, error level and tag (standard)
 
@@ -21,7 +21,7 @@ It needs backing by the [Accessibility Dashboard Webservice](https://bitbucket.o
 ***
 ## Getting started
 
-You should download and spin up an instance of the [Accessibility Dashboard Webservice](https://bitbucket.org/atlassian/a11y-dashboard-webservice/) first and then use the `WEBSERVICE_URL` environment variable to point the Dashboard against it. For an example you can have a look at the dotfiles in `/test` and the according command in `package.json`.
+You should download and spin up an instance of the [Accessibility Dashboard Webservice](https://github.com/joscha/a11y-dashboard-webservice/) first and then use the `WEBSERVICE_URL` environment variable to point the Dashboard against it. For an example you can have a look at the dotfiles in `/test` and the according command in `package.json`.
 
 ***
 ## How to contribute
@@ -30,12 +30,3 @@ PRs are welcome!
 You can spin up a dev instance via running `npm run dev:local:local` - it is also possible to point the dashboard frontend to an existing docker instance running the backend. Have a look at `package.json` for some examples.
 
 Make sure your code lints (`npm run lint`) and the tests are green (`npm test`).
-
-Please sign the according Atlassian CLA before making any contributions:
-
-* [Corporate CLA](https://na2.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=e1c17c66-ca4d-4aab-a953-2c231af4a20b)
-* [Individual CLA](https://na2.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=3f94fbdc-2fbe-46ac-b14c-5d152700ae5d)
-
-***
-## Get support
-Please use our [issue tracker](https://bitbucket.org/atlassian/a11y-dashboard/issues?status=new&status=open).
